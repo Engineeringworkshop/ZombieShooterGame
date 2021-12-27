@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
 
+    [SerializeField] GameObject feets; // referencia a los pies, para poder coger si animator
+    public Animator FeetAnim { get; private set; } // Referencia al animator de los pies
+
     public PlayerInput playerInput;
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
 
@@ -53,14 +56,15 @@ public class Player : MonoBehaviour
         playerInput = new PlayerInput();
 
         // Creamos los objetos estado
-        IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", null, null);
-        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", null, null, playerData);
+        IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
+        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", null, null, playerData);
     }
 
     // Start 
     void Start()
     {
-        Anim = GetComponent<Animator>(); 
+        Anim = GetComponent<Animator>();
+        FeetAnim = feets.GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
 
         // Inicializamos la maquina de estados

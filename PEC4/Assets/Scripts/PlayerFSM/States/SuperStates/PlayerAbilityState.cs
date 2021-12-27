@@ -6,7 +6,7 @@ public class PlayerAbilityState : PlayerState
 {
     protected bool isAbilityDone; // bool para saber si el estado ability ha terminado o no
 
-    public PlayerAbilityState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
+    public PlayerAbilityState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(player, stateMachine, animBoolName, animFeetBoolName, audioClip, particleSystem)
     {
     }
 

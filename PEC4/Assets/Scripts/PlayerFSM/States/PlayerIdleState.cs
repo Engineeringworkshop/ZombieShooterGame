@@ -6,7 +6,7 @@ public class PlayerIdleState : PlayerState
 {
     protected Vector2 movementInput;
 
-    public PlayerIdleState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
+    public PlayerIdleState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(player, stateMachine, animBoolName, animFeetBoolName, audioClip, particleSystem)
     {
     }
 
