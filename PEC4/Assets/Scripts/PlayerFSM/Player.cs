@@ -28,7 +28,8 @@ public class Player : MonoBehaviour
 
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
-    public PlayerInputHandler InputHandler { get; private set; } // Referencia al player input handler
+
+    public PlayerInput playerInput;
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
 
     #endregion
@@ -48,16 +49,18 @@ public class Player : MonoBehaviour
         // Creamos el objeto state machine
         StateMachine = new PlayerStateMachine();
 
+        // Creamos el mapa de acciones (controles)
+        playerInput = new PlayerInput();
+
         // Creamos los objetos estado
-        IdleState = new PlayerIdleState(this, StateMachine, "idle", null, null);
-        MoveState = new PlayerMoveState(this, StateMachine, "move", null, null, playerData);
+        IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", null, null);
+        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", null, null, playerData);
     }
 
     // Start 
     void Start()
     {
-        Anim = GetComponent<Animator>();
-        InputHandler = GetComponent<PlayerInputHandler>();
+        Anim = GetComponent<Animator>(); 
         RB = GetComponent<Rigidbody2D>();
 
         // Inicializamos la maquina de estados
@@ -67,10 +70,6 @@ public class Player : MonoBehaviour
     // En cada Update llamamos al LogicUpdate() del estado correspondiente
     void Update()
     {
-        CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
-
-        FaceMouse(); // Gira el personaje para que apunte a la posición del cursor.
-
         StateMachine.CurrentState.LogicUpdate();
     }
 
@@ -78,9 +77,26 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
+
+        CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
+
+        FaceMouse(); // Gira el personaje para que apunte a la posición del cursor.
     }
 
     #endregion
+
+    private void OnEnable()
+    {
+        // Activamos el mapa de acciones
+        playerInput.Gameplay.Enable();
+    }
+
+    private void OnDisable()
+    {
+        // Desactivamos el mapa de acciones
+        playerInput.Gameplay.Disable();
+    }
+
 
     #region Set Functions
 
@@ -124,5 +140,8 @@ public class Player : MonoBehaviour
 
     #endregion
 
-
+    void OnMove(InputValue value)
+    {
+        Debug.Log("OnMove");
+    }
 }

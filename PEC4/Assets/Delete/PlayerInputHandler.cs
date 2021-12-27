@@ -14,8 +14,8 @@ public class PlayerInputHandler : MonoBehaviour
     
     public void OnMoveInput(InputAction.CallbackContext context)
     {
-        //Debug.Log("Move input");
         RawMovementInput = context.ReadValue<Vector2>();
+        Debug.Log("Move input: " + RawMovementInput);
 
         // Separamos las componentes del input
         NormInputX = (int)(RawMovementInput * Vector2.right).normalized.x;

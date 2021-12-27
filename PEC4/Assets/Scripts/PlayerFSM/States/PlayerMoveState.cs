@@ -6,8 +6,7 @@ public class PlayerMoveState : PlayerState
 {
     protected PlayerData playerData;
 
-    protected int xInput;
-    protected int yInput;
+    protected Vector2 movementInput;
 
     public PlayerMoveState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
     {
@@ -18,14 +17,14 @@ public class PlayerMoveState : PlayerState
     {
         base.LogicUpdate();
 
-        xInput = player.InputHandler.NormInputX;
-        yInput = player.InputHandler.NormInputY;
+        // Obtenemos el movimiento de los controles
+        movementInput = player.playerInput.Gameplay.Movement.ReadValue<Vector2>();
 
-        var movementVelocity = playerData.movementVelocity;
-        player.SetVelocity(new Vector2(movementVelocity * xInput, movementVelocity * yInput));
-        
-        // Transición al estado idle si no hay imput.
-        if (xInput == 0)
+        // lo multiplicamos por la velocidad del personaje
+        player.SetVelocity(movementInput * playerData.movementVelocity);
+
+        // Transición al estado idle si la magnitud (al cuadrado) es igual a 0. No hay input de movimiento 
+        if (movementInput.sqrMagnitude == 0)
         {
             stateMachine.ChangeState(player.IdleState);
         }

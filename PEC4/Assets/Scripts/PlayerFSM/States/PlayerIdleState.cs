@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerState
 {
-    protected int xInput;
-    protected int yInput;
+    protected Vector2 movementInput;
 
     public PlayerIdleState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
     {
@@ -31,12 +30,11 @@ public class PlayerIdleState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        
-        xInput = player.InputHandler.NormInputX;
-        yInput = player.InputHandler.NormInputY;
 
-        // Transición al estado Move si hay un input de movimiento.
-        if (xInput != 0 || yInput != 0)
+        movementInput = player.playerInput.Gameplay.Movement.ReadValue<Vector2>();
+
+        // Transición al estado Move si la magnitud (al cuadrado) es distinta de 0.
+        if (movementInput.sqrMagnitude != 0)
         {
             stateMachine.ChangeState(player.MoveState);
         }
