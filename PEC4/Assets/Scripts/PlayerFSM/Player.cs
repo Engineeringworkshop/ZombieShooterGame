@@ -44,7 +44,6 @@ public class Player : MonoBehaviour
 
     #endregion
 
-
     #region Unity Callback Methods
 
     private void Awake()
@@ -87,8 +86,6 @@ public class Player : MonoBehaviour
         FaceMouse(); // Gira el personaje para que apunte a la posición del cursor.
     }
 
-    #endregion
-
     private void OnEnable()
     {
         // Activamos el mapa de acciones
@@ -101,6 +98,7 @@ public class Player : MonoBehaviour
         playerInput.Gameplay.Disable();
     }
 
+    #endregion
 
     #region Set Functions
 
@@ -143,9 +141,4 @@ public class Player : MonoBehaviour
     }
 
     #endregion
-
-    void OnMove(InputValue value)
-    {
-        Debug.Log("OnMove");
-    }
 }
