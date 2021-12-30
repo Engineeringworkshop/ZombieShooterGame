@@ -5,6 +5,16 @@ using UnityEngine;
 public class Zombie1_MoveState : Zombie1_State
 {
     protected Vector3 targetPosition;
+
+    public float movementSpeed = 3f;
+
+    public float minRandomTravelDistance = 2f;
+    public float maxRandomTravelDistance = 8f;
+
+    public Vector3 targetDirection;
+
+    public LayerMask whatsIsBlockingWalk;
+
     public Zombie1_MoveState(Zombie1 zombie1, Zombie1_StateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(zombie1, stateMachine, animBoolName, audioClip, particleSystem)
     {
     }
@@ -20,6 +30,7 @@ public class Zombie1_MoveState : Zombie1_State
 
         // TODO cuando entre escoge posición objetivo valida con un random raycast
         PickRandomPosition();
+        CheckValidPosition();
     }
 
     public override void Exit()
@@ -32,7 +43,12 @@ public class Zombie1_MoveState : Zombie1_State
         base.LogicUpdate();
         
         // TODO Cuando alcanza la posicion final cambia a estado idle
-        stateMachine.ChangeState(zombie1.IdleState);
+        if (Vector3.Distance(zombie1.transform.position, targetPosition) < 0.1f)
+        {
+            Debug.Log("Se ha alcanzado la posición");
+            stateMachine.ChangeState(zombie1.IdleState);
+        }
+        
     }
 
     public override void PhysicsUpdate()
@@ -40,15 +56,44 @@ public class Zombie1_MoveState : Zombie1_State
         base.PhysicsUpdate();
     }
 
+    // Metodo para calcular una posición destino aleatoria
     private void PickRandomPosition()
     {
         Vector3 currentPosition = zombie1.transform.position;
-        float distance = Random.Range(1f, 7f);
+        float distance = Random.Range(minRandomTravelDistance, maxRandomTravelDistance);
         float angle = Random.Range(0f, 2*Mathf.PI);
         var dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+
+        // Calculamos la posición objetivo
         targetPosition = currentPosition + distance * dir;
 
-        //Physics2D.Raycast(zombie1.transform, )
-  
+        // Calculamos la dirección del objetivo
+        targetDirection = (targetPosition - zombie1.transform.position).normalized;
+    }
+
+    // Metodo para comprobar que es una posición destino válida
+    private void CheckValidPosition()
+    {
+        var col = Physics2D.OverlapCircle(targetPosition, 3f, whatsIsBlockingWalk);
+        if(col == null)
+        {
+            MoveToTarget();
+        }
+    }
+
+    // Metodo para mover y girar el enemigo en la dirección del movimiento
+    private void MoveToTarget()
+    {
+        zombie1.SetVelocity(targetDirection * movementSpeed);
+        zombie1.transform.right = targetDirection;
+    }
+
+    // Metodo para girar el zombie de forma progresiva
+    private void ProgresiveTurn()
+    {
+        var turnDegByFrames = 5f;
+        var amountOfSkipedFrames = 10;
+        var numberOfParcialTurns;
+        Vector3.Angle(zombie1.transform.right, targetDirection);
     }
 }

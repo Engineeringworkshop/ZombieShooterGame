@@ -46,7 +46,9 @@ public class Zombie1 : MonoBehaviour
 
     private float minTimeBetweenActions = 2f;
     private float maxTimeBetweenActions = 5f;
-
+    public Vector2 CurrentVelocity { get; private set; } // Creamos un vecotr que guardará la velocidad del player al inicio del frame. Para evitar hacer demasiadas consultas al rigidbody2D. Aumenta el gasto de memoria pero aumenta el rendimiento tambien.
+    private Vector2 workspaceVelocity; // Creando este vector, nos evitamos tener que crearlo cada vez que queremos cambiar de velocidad 
+    
     #endregion
 
     #region Unity Callback Methods
@@ -85,12 +87,22 @@ public class Zombie1 : MonoBehaviour
     {
         StateMachine.CurrentState.PhysicsUpdate();
 
+        CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
+
         CheckPlayerInCloseRange();
     }
 
     #endregion
 
     #region Other functions
+
+    // Metodo para modificar la velocidad de movimiento en ambas direcciones, horizontal y vertical
+    public void SetVelocity(Vector2 velocity)
+    {
+        workspaceVelocity.Set(velocity.x, velocity.y);
+        RB.velocity = workspaceVelocity; //Actualziamos la velocidad del player
+        CurrentVelocity = workspaceVelocity; //Actualizamos la velocidad actual
+    }
 
     // Metodo para detectar al jugador en rango cercano (circulo alrededor del enemigo) 
     void CheckPlayerInCloseRange()
