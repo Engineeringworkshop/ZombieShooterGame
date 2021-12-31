@@ -121,4 +121,19 @@ public class Zombie1 : MonoBehaviour
     }
 
     #endregion
+
+    #region coroutines
+
+    // Coroutine para girar el zombie de forma progresiva
+    public IEnumerator ProgresiveTurn(float currentTurnAngle, float angleToTurn, float angleIncrement)
+    {
+        while (currentTurnAngle < angleToTurn)
+        {
+            Debug.Log("Coroutine giro");
+            currentTurnAngle += angleIncrement;
+            yield return null;
+        }
+    }
+
+    #endregion
 }
