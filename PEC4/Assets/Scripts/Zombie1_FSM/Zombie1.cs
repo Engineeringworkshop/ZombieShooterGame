@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie1 : MonoBehaviour
+public class Zombie1 : MonoBehaviour, IDamageable
 {
     #region State Variables
 
@@ -15,6 +15,7 @@ public class Zombie1 : MonoBehaviour
     public Zombie1_PlayerDetectedState PlayerDetectedState { get; private set; }
     public Zombie1_AttackState AttackState { get; private set; }
     public Zombie1_DeadState DeadState { get; private set; }
+    public Zombie1_TurnState TurnState { get; private set; }
 
     #endregion
 
@@ -38,17 +39,26 @@ public class Zombie1 : MonoBehaviour
     #region Atributes
 
     private float closeRangeDetectionRadius = 3f;
+
     public LayerMask whatsIsPlayer;
+
+    public float currHealth { get; private set; } // vida actual del zombie
 
     #endregion
 
     #region Control variables
 
-    private float minTimeBetweenActions = 2f;
-    private float maxTimeBetweenActions = 5f;
+    public float minTimeBetweenActions = 1f;
+    public float maxTimeBetweenActions = 5f;
+
+    // Variables de movimeinto
     public Vector2 CurrentVelocity { get; private set; } // Creamos un vecotr que guardará la velocidad del player al inicio del frame. Para evitar hacer demasiadas consultas al rigidbody2D. Aumenta el gasto de memoria pero aumenta el rendimiento tambien.
     private Vector2 workspaceVelocity; // Creando este vector, nos evitamos tener que crearlo cada vez que queremos cambiar de velocidad 
-    
+
+    public Vector3 targetPosition;
+    public Vector3 targetDirection;
+
+
     #endregion
 
     #region Unity Callback Methods
@@ -64,6 +74,9 @@ public class Zombie1 : MonoBehaviour
         PlayerDetectedState = new Zombie1_PlayerDetectedState(this, StateMachine, "", null, null);
         AttackState = new Zombie1_AttackState(this, StateMachine, "zombie1_attack", null, null);
         DeadState = new Zombie1_DeadState(this, StateMachine, "", null, null);
+        TurnState = new Zombie1_TurnState(this, StateMachine, "zombie1_turn", null, null);
+
+        currHealth = zombie1Data.maxHealth;
     }
 
     // Start is called before the first frame update
@@ -92,6 +105,13 @@ public class Zombie1 : MonoBehaviour
         CheckPlayerInCloseRange();
     }
 
+    // Dibuja en la escena
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(targetPosition, 1);
+        Gizmos.DrawRay(transform.position, targetDirection);
+    }
+
     #endregion
 
     #region Other functions
@@ -110,7 +130,7 @@ public class Zombie1 : MonoBehaviour
         var collider = Physics2D.OverlapCircle(transform.position, closeRangeDetectionRadius, whatsIsPlayer); // devovlerá true si el circulo creado toca el suelo.
         if (collider != null && collider.CompareTag("Player"))
         {
-            Debug.Log("Zombie1 ha detectado al jugador");
+            //Debug.Log("Zombie1 ha detectado al jugador");
         }
     }
 
@@ -124,16 +144,30 @@ public class Zombie1 : MonoBehaviour
 
     #region coroutines
 
-    // Coroutine para girar el zombie de forma progresiva
-    public IEnumerator ProgresiveTurn(float currentTurnAngle, float angleToTurn, float angleIncrement)
+    // Coroutine para cmabiar al estado de giro despues del tiempo especificado
+    public IEnumerator ChangeToTurnStateOnTime(float time)
     {
-        while (currentTurnAngle < angleToTurn)
+        yield return new WaitForSecondsRealtime(time);
+        StateMachine.ChangeState(TurnState);
+    }
+
+    // metodo del interface IDamageable para que el zombie reciba daño 
+    public void Damage(float amount)
+    {
+        if (currHealth - amount <= 0)
         {
-            Debug.Log("Coroutine giro");
-            currentTurnAngle += angleIncrement;
-            yield return null;
+            Destroy(gameObject);
         }
+        else
+        {
+            currHealth -= amount;
+        }
+
+        Debug.Log("Health: " + currHealth);
     }
 
     #endregion
+
+
 }
+

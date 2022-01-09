@@ -38,7 +38,7 @@ public class Zombie1_State
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
-        //Debug.Log("Zombie1: " + animBoolName);
+        Debug.Log("Zombie1: " + animBoolName);
     }
 
     // Exit() se ejecutará al salir del estado

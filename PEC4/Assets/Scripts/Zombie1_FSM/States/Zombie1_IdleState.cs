@@ -18,6 +18,10 @@ public class Zombie1_IdleState : Zombie1_State
     public override void Enter()
     {
         base.Enter();
+
+        zombie1.SetVelocity(new Vector2(0f, 0f));
+
+        zombie1.StartCoroutine(zombie1.ChangeToTurnStateOnTime(Random.Range(zombie1.minTimeBetweenActions, zombie1.maxTimeBetweenActions)));
     }
 
     public override void Exit()
@@ -28,11 +32,6 @@ public class Zombie1_IdleState : Zombie1_State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        // TODO movimiento del zombie    movementInput = zombie1.playerInput.Gameplay.Movement.ReadValue<Vector2>();
-
-        stateMachine.ChangeState(zombie1.MoveState);
-    
     }
 
     public override void PhysicsUpdate()
