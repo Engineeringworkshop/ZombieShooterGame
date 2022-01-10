@@ -18,4 +18,5 @@ MonoBehaviour:
   magacineCapacity: 30
   magacineReloadTime: 2
   MuzzleFlashEffect: {fileID: 8421046136046601021, guid: aea80ff1c55586e4ba1d96e00a087607, type: 3}
-  MagazineReloadEffect: {fileID: 0}
+  AmmoClipEmpty: {fileID: 8563503114637665638, guid: 87e84817203c0c044a9d1df3c280b4de, type: 3}
+  AmmoClipNotEmpty: {fileID: 8563503114637665638, guid: 429afa0421248354698207801302609b, type: 3}

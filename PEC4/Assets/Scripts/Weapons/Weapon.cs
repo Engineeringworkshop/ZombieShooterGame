@@ -34,7 +34,7 @@ public class Weapon : MonoBehaviour
             ShootBullet();
         }
         // Si se ha presionado la tecla de recarga
-        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f)
+        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading)
         {
             isReloading = true;
             ReloadWeapon();
@@ -80,7 +80,22 @@ public class Weapon : MonoBehaviour
     void ReloadWeapon()
     {
         StartCoroutine(ReloadWeaponTimer());
-        // TODO instanciar efecto de cargador vacio en el suelo
+        if (currentBulletsInMagazine > 0)
+        {
+            StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipNotEmpty));
+        }
+        else
+        {
+            StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipEmpty));
+        }
+    }
+
+    // Metodo para girar la bala en la dirección de disparo teniendo en cuenta la dispersión del arma
+    void SetBulletOnDirection(GameObject bullet)
+    {
+        var shootPrecision = weaponData.basePrecision; // TODO añadir la dispersión por el nivel del jugador
+        var shootAngle = Random.Range(-shootPrecision, shootPrecision);
+        bullet.transform.Rotate(0f, 0f, shootAngle);
     }
 
     // Coroutine para retrasar la recarga segun el tiempo que tarda en recargar, así no podremos disparar antes de tiempo
@@ -91,11 +106,10 @@ public class Weapon : MonoBehaviour
         currentBulletsInMagazine = weaponData.magacineCapacity;
     }
 
-    // Metodo para girar la bala en la dirección de disparo teniendo en cuenta la dispersión del arma
-    void SetBulletOnDirection(GameObject bullet)
+    // Coroutine para invocar el cargador con cierto retraso al recargar
+    IEnumerator InstantiateAmmoClip(ParticleSystem particleSystem)
     {
-        var shootPrecision = weaponData.basePrecision; // TODO añadir la dispersión por el nivel del jugador
-        var shootAngle = Random.Range(-shootPrecision, shootPrecision);
-        bullet.transform.Rotate(0f, 0f, shootAngle);
+        yield return new WaitForSecondsRealtime(0.5f);
+        Instantiate(particleSystem, firePoint.position, firePoint.rotation);
     }
 }

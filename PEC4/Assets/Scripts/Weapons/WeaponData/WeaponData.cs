@@ -19,6 +19,7 @@ public class WeaponData : ScriptableObject
 
     // Configuracion multimedia
     public GameObject MuzzleFlashEffect;
-    public GameObject MagazineReloadEffect;
+    public ParticleSystem AmmoClipEmpty;
+    public ParticleSystem AmmoClipNotEmpty;
 }
 

@@ -12,4 +12,7 @@ public class Zombie1Data : ScriptableObject
 
     [Header("Atributes")]
     public float maxHealth = 50;
+
+    [Header("Effects")]
+    public ParticleSystem bloodEffect;
 }

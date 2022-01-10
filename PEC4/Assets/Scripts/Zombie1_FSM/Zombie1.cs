@@ -112,6 +112,17 @@ public class Zombie1 : MonoBehaviour, IDamageable
         Gizmos.DrawRay(transform.position, targetDirection);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Bullet"))
+        {
+            var effect = Instantiate(zombie1Data.bloodEffect, collision.transform.position, collision.transform.rotation);
+            Debug.Log("effect pos: " + effect.transform.up);
+            effect.transform.up = gameObject.transform.right;
+            Debug.Log("effect pos2: " + effect.transform.up);
+        }
+    }
+
     #endregion
 
     #region Other functions
