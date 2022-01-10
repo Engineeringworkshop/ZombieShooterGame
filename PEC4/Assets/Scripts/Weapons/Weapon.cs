@@ -10,6 +10,8 @@ public class Weapon : MonoBehaviour
     public GameObject bulletPrefab;
     public WeaponData weaponData;
 
+    public bool isReloading;
+
     // Atributos
     int currentBulletsInMagazine; // Guarda la cantidad de balas en el cargador
 
@@ -18,7 +20,9 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         // el arma se inicia con el cargador lleno
-        currentBulletsInMagazine = weaponData.magacineCapacity; 
+        currentBulletsInMagazine = weaponData.magacineCapacity;
+
+        isReloading = false;
     }
     
 
@@ -32,6 +36,7 @@ public class Weapon : MonoBehaviour
         // Si se ha presionado la tecla de recarga
         else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f)
         {
+            isReloading = true;
             ReloadWeapon();
         }
     }
@@ -39,11 +44,15 @@ public class Weapon : MonoBehaviour
     // Metodo para instanciar una bala
     void ShootBullet()
     {
-        // Crea una bala si ha pasado el tiempo entre disparos
-        if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire)
+        // Crea una bala si ha pasado el tiempo entre disparos y no está recargando
+        if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading)
         {
             // Instanciamos la bala
             var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+            // Instanciamos el effecto de disparo
+            var effect = Instantiate(weaponData.MuzzleFlashEffect, firePoint.position, player.transform.rotation);
+            effect.transform.parent = transform;
 
             // Rotamos la bala
             SetBulletOnDirection(bullet);
@@ -78,6 +87,7 @@ public class Weapon : MonoBehaviour
     IEnumerator ReloadWeaponTimer()
     {
         yield return new WaitForSecondsRealtime(weaponData.magacineReloadTime);
+        isReloading = false;
         currentBulletsInMagazine = weaponData.magacineCapacity;
     }
 

@@ -19,7 +19,7 @@ public class PlayerIdleState : PlayerState
     {
         base.Enter();
 
-        StopPlayer(); // Paramos al jugador al entrar
+        player.StopPlayer(); // Paramos al jugador al entrar
     }
 
     public override void Exit()
@@ -38,8 +38,12 @@ public class PlayerIdleState : PlayerState
         {
             stateMachine.ChangeState(player.MoveState);
         }
+        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f)
+        {
+            stateMachine.ChangeState(player.ReloadIdleState);
+        }
 
-        StopPlayer(); // Mantenemos el jugador parado (para que no se mueva al ser impactado
+        player.StopPlayer(); // Mantenemos el jugador parado (para que no se mueva al ser impactado)
     
     }
 
@@ -48,9 +52,5 @@ public class PlayerIdleState : PlayerState
         base.PhysicsUpdate();
     }
 
-    // Metodo para parar al jugador
-    private void StopPlayer()
-    {
-        player.SetVelocity(new Vector2(0f, 0f)); // Paramos el movimiento si pasa a idle state
-    }
+
 }

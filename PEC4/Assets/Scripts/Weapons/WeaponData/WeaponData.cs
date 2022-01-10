@@ -16,5 +16,9 @@ public class WeaponData : ScriptableObject
     [Header("Magacine")]
     public int magacineCapacity = 3; // Capacidad del cargador antes de tener que recargar
     public float magacineReloadTime = 5f; // tiempo de recarga
+
+    // Configuracion multimedia
+    public GameObject MuzzleFlashEffect;
+    public GameObject MagazineReloadEffect;
 }
 

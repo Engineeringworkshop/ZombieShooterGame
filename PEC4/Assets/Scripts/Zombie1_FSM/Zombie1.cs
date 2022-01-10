@@ -156,6 +156,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
     {
         if (currHealth - amount <= 0)
         {
+            Debug.Log("Zombie muerto");
             Destroy(gameObject);
         }
         else

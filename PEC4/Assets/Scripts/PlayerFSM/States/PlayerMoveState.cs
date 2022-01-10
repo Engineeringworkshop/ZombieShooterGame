@@ -28,5 +28,10 @@ public class PlayerMoveState : PlayerState
         {
             stateMachine.ChangeState(player.IdleState);
         }
+        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f)
+        {
+            stateMachine.ChangeState(player.ReloadIdleState);
+        }
+
     }
 }

@@ -13,11 +13,12 @@ public class Player : MonoBehaviour
     // Estados
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
+    public PlayerReloadState ReloadIdleState { get; private set; }
 
     #endregion
 
     #region Data
-    
+
     [Header("Data")]
 
     [SerializeField] private PlayerData playerData;
@@ -34,6 +35,8 @@ public class Player : MonoBehaviour
 
     public PlayerInput playerInput;
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
+
+    public Weapon WeaponComponent { get; private set; }
 
     #endregion
 
@@ -57,6 +60,7 @@ public class Player : MonoBehaviour
         // Creamos los objetos estado
         IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
         MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", null, null, playerData);
+        ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", null, null, playerData);
     }
 
     // Start 
@@ -65,6 +69,8 @@ public class Player : MonoBehaviour
         Anim = GetComponent<Animator>();
         FeetAnim = feets.GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
+
+        WeaponComponent = GetComponent<Weapon>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
@@ -140,6 +146,11 @@ public class Player : MonoBehaviour
         transform.right = direction;
     }
 
+    // Metodo para parar al jugador
+    public void StopPlayer()
+    {
+        SetVelocity(new Vector2(0f, 0f)); // Paramos el movimiento si pasa a idle state
+    }
     #endregion
 
 }
