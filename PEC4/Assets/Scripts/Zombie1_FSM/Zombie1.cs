@@ -33,6 +33,8 @@ public class Zombie1 : MonoBehaviour, IDamageable
 
     #endregion
 
+    [SerializeField] public Player player;
+
     #region Componentes
 
     // Creamos las referencias a componentes
@@ -125,9 +127,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
         if (collision.CompareTag("Bullet"))
         {
             var effect = Instantiate(zombie1Data.bloodEffect, collision.transform.position, collision.transform.rotation);
-            Debug.Log("effect pos: " + effect.transform.up);
             effect.transform.up = gameObject.transform.right;
-            Debug.Log("effect pos2: " + effect.transform.up);
         }
     }
 
@@ -175,7 +175,10 @@ public class Zombie1 : MonoBehaviour, IDamageable
     {
         if (currHealth - amount <= 0)
         {
-            Debug.Log("Zombie muerto");
+            // incrementamos la puntuación del jugador
+            player.increseScore(zombie1Data.score);
+
+            // destruimos el zombie
             Destroy(gameObject);
         }
         else
@@ -186,7 +189,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
         //TODO activar la barra al recibir daño
         healthBar.SetHealth(currHealth);
 
-        Debug.Log("Health: " + currHealth);
+        //Debug.Log("Health: " + currHealth);
     }
 
     #endregion

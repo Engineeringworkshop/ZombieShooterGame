@@ -47,6 +47,14 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    #region Player atributes
+
+    private float currHealth;
+
+    public int score;
+
+    #endregion
+
     #region Unity Callback Methods
 
     private void Awake()
@@ -150,6 +158,13 @@ public class Player : MonoBehaviour
     public void StopPlayer()
     {
         SetVelocity(new Vector2(0f, 0f)); // Paramos el movimiento si pasa a idle state
+    }
+
+    // metodo para incrementar el score del jugador
+    public void increseScore(int amount)
+    {
+        score += amount;
+        Debug.Log("Score: " + score);
     }
     #endregion
 

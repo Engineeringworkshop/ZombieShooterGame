@@ -13,6 +13,7 @@ public class MobSpawner : MonoBehaviour
 
     [SerializeField] public float maxSpawnRadius = 5;
 
+    [SerializeField] public Player player;
 
     List<GameObject> entities;
 
@@ -35,6 +36,8 @@ public class MobSpawner : MonoBehaviour
         if (entities.Count < SpawnAmount)
         {
             GameObject instance = Instantiate(prefab, GetRandomPosition(), Quaternion.identity);
+
+            instance.GetComponent<Zombie1>().player = player;
 
             entities.Add(instance);
         }

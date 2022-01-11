@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zombie1Data: {fileID: 11400000, guid: 93500b68cd3abc64ca01b9c2e7eeeff4, type: 2}
   healthBar: {fileID: 7562231218084829442}
+  player: {fileID: 0}
   whatsIsPlayer:
     serializedVersion: 2
     m_Bits: 32768
