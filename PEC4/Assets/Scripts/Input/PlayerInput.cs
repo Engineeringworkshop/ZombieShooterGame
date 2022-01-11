@@ -41,6 +41,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""CameraZoom"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7af84db9-c7e6-4a32-b1b3-290c448c552b"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -175,6 +183,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""ReloadWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32dc0837-70b4-4d22-9cfc-155d3dfb637d"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -186,6 +205,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
         m_Gameplay_ReloadWeapon = m_Gameplay.FindAction("ReloadWeapon", throwIfNotFound: true);
+        m_Gameplay_CameraZoom = m_Gameplay.FindAction("CameraZoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -238,6 +258,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Movement;
     private readonly InputAction m_Gameplay_Shoot;
     private readonly InputAction m_Gameplay_ReloadWeapon;
+    private readonly InputAction m_Gameplay_CameraZoom;
     public struct GameplayActions
     {
         private @PlayerInput m_Wrapper;
@@ -245,6 +266,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
         public InputAction @ReloadWeapon => m_Wrapper.m_Gameplay_ReloadWeapon;
+        public InputAction @CameraZoom => m_Wrapper.m_Gameplay_CameraZoom;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -263,6 +285,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ReloadWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReloadWeapon;
                 @ReloadWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReloadWeapon;
                 @ReloadWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReloadWeapon;
+                @CameraZoom.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
+                @CameraZoom.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -276,6 +301,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ReloadWeapon.started += instance.OnReloadWeapon;
                 @ReloadWeapon.performed += instance.OnReloadWeapon;
                 @ReloadWeapon.canceled += instance.OnReloadWeapon;
+                @CameraZoom.started += instance.OnCameraZoom;
+                @CameraZoom.performed += instance.OnCameraZoom;
+                @CameraZoom.canceled += instance.OnCameraZoom;
             }
         }
     }
@@ -285,5 +313,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnReloadWeapon(InputAction.CallbackContext context);
+        void OnCameraZoom(InputAction.CallbackContext context);
     }
 }

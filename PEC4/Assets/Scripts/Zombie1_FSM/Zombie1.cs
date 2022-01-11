@@ -27,11 +27,16 @@ public class Zombie1 : MonoBehaviour, IDamageable
 
     #endregion
 
+    #region Objetos extra
+
+    [SerializeField] public HealthBar healthBar; // Referencia a la barra de vida
+
+    #endregion
+
     #region Componentes
 
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
-
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
 
     #endregion
@@ -76,7 +81,10 @@ public class Zombie1 : MonoBehaviour, IDamageable
         DeadState = new Zombie1_DeadState(this, StateMachine, "", null, null);
         TurnState = new Zombie1_TurnState(this, StateMachine, "zombie1_turn", null, null);
 
+        // cargamos la vida maxima en la variable y en la barra de salud
         currHealth = zombie1Data.maxHealth;
+        healthBar.SetMaxHealth(currHealth);
+        //TODO desactivar la barra de salud si el enemigo está a 100% hasta que esté dañado
     }
 
     // Start is called before the first frame update
@@ -174,6 +182,9 @@ public class Zombie1 : MonoBehaviour, IDamageable
         {
             currHealth -= amount;
         }
+
+        //TODO activar la barra al recibir daño
+        healthBar.SetHealth(currHealth);
 
         Debug.Log("Health: " + currHealth);
     }

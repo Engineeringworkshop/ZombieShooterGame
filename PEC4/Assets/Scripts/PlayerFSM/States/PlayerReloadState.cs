@@ -8,6 +8,7 @@ public class PlayerReloadState : PlayerAbilityState
 
     protected Vector2 movementInput;
 
+    protected bool feetMove;
     public PlayerReloadState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, animFeetBoolName, audioClip, particleSystem)
     {
         this.playerData = playerData;
@@ -23,6 +24,7 @@ public class PlayerReloadState : PlayerAbilityState
         base.Enter();
 
         player.StopPlayer(); // Paramos al jugador al entrar en el estado Idle
+        feetMove = false;
     }
 
     public override void Exit()
@@ -46,11 +48,14 @@ public class PlayerReloadState : PlayerAbilityState
         {
             player.SetVelocity(movementInput * playerData.movementVelocity);
             player.FeetAnim.Play("move_feet");
+            feetMove = true;
+
         }
         else if (player.WeaponComponent.isReloading && movementInput.sqrMagnitude <= Mathf.Epsilon)
         {
             player.StopPlayer();
             player.FeetAnim.Play("idle_feet");
+            feetMove = false;
         }
     }
 
