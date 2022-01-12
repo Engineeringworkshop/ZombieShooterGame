@@ -13,14 +13,18 @@ public class Weapon : MonoBehaviour
     public bool isReloading;
 
     // Atributos
-    int currentBulletsInMagazine; // Guarda la cantidad de balas en el cargador
+    public int currentBulletsInMagazine; // Guarda la cantidad de balas en el cargador
+
+    public int currentClipAmount;
 
     float prevShootTime = 0f;
 
     private void Start()
     {
         // el arma se inicia con el cargador lleno
-        currentBulletsInMagazine = weaponData.magacineCapacity;
+        currentBulletsInMagazine = weaponData.clipCapacity;
+
+        currentClipAmount = weaponData.clipStartAmmount;
 
         isReloading = false;
     }
@@ -34,9 +38,10 @@ public class Weapon : MonoBehaviour
             ShootBullet();
         }
         // Si se ha presionado la tecla de recarga
-        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading)
+        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading && currentClipAmount > 0 && currentBulletsInMagazine < weaponData.clipCapacity)
         {
             isReloading = true;
+            currentClipAmount--;
             ReloadWeapon();
         }
     }
@@ -101,9 +106,9 @@ public class Weapon : MonoBehaviour
     // Coroutine para retrasar la recarga segun el tiempo que tarda en recargar, así no podremos disparar antes de tiempo
     IEnumerator ReloadWeaponTimer()
     {
-        yield return new WaitForSecondsRealtime(weaponData.magacineReloadTime);
+        yield return new WaitForSecondsRealtime(weaponData.clipReloadTime);
         isReloading = false;
-        currentBulletsInMagazine = weaponData.magacineCapacity;
+        currentBulletsInMagazine = weaponData.clipCapacity;
     }
 
     // Coroutine para invocar el cargador con cierto retraso al recargar

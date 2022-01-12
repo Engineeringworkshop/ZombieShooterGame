@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   movementVelocity: 10
+  maxHealthBase: 200
+  startAidKits: 3
+  maxAidKits: 5
+  maxHealthRestoredAidKit: 40
+  healTime: 5
+  healEffect: {fileID: 8301468580992012258, guid: c3bd9f7be47f3a74299212bfc42a5f98, type: 3}

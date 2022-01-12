@@ -14,10 +14,14 @@ public class WeaponData : ScriptableObject
 
     // Configuración de los cargadores
     [Header("Magacine")]
-    public int magacineCapacity = 3; // Capacidad del cargador antes de tener que recargar
-    public float magacineReloadTime = 5f; // tiempo de recarga
+    public int clipCapacity = 30; // Capacidad del cargador antes de tener que recargar
+    public float clipReloadTime = 5f; // tiempo de recarga
+
+    public int clipStartAmmount = 3; // cargadores al empezar el juego
+    public int clipMaxAmmount = 8; // Capacidad máxima de cargadores de cada arma
 
     // Configuracion multimedia
+    [Header("Multimedia")]
     public GameObject MuzzleFlashEffect;
     public ParticleSystem AmmoClipEmpty;
     public ParticleSystem AmmoClipNotEmpty;

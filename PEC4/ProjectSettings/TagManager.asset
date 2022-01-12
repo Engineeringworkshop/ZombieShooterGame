@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bullet
+  - FirstAidKit
+  - AmmoBox
   layers:
   - Default
   - TransparentFX
@@ -50,6 +52,9 @@ TagManager:
     locked: 0
   - name: Enemies
     uniqueID: 2146860767
+    locked: 0
+  - name: Pickables
+    uniqueID: 2416667363
     locked: 0
   - name: Effects
     uniqueID: 3879721445

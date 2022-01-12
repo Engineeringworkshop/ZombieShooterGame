@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     [Header("Data")]
 
-    [SerializeField] private PlayerData playerData;
+    [SerializeField] public PlayerData playerData;
     
     #endregion
 
@@ -49,9 +49,13 @@ public class Player : MonoBehaviour
 
     #region Player atributes
 
-    private float currHealth;
+    public float currHealth;
 
     public int score;
+
+    public int currAidKitAmount;
+
+    public bool isHealing;
 
     #endregion
 
@@ -69,6 +73,12 @@ public class Player : MonoBehaviour
         IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
         MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", null, null, playerData);
         ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", null, null, playerData);
+
+        currHealth = playerData.maxHealthBase;
+
+        currAidKitAmount = playerData.startAidKits;
+
+        isHealing = false;
     }
 
     // Start 
@@ -88,6 +98,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
+
+        if (playerInput.Gameplay.HealPlayer.ReadValue<float>() > 0.5f)
+        {
+            HealPlayer();
+        }
     }
 
     // En cada Update llamamos al PhysicsUpdate() del estado correspondiente
@@ -99,6 +114,21 @@ public class Player : MonoBehaviour
 
         FaceMouse(); // Gira el personaje para que apunte a la posición del cursor.
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("FirstAidKit") && currAidKitAmount < playerData.maxAidKits)
+        {
+            currAidKitAmount++;
+            Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("AmmoBox") && WeaponComponent.currentClipAmount < WeaponComponent.weaponData.clipMaxAmmount)
+        {
+            WeaponComponent.currentClipAmount++;
+            Destroy(collision.gameObject);
+        }
+    }
+
 
     private void OnEnable()
     {
@@ -166,6 +196,53 @@ public class Player : MonoBehaviour
         score += amount;
         Debug.Log("Score: " + score);
     }
+
+    // metodo para curar al jugador
+    public void HealPlayer()
+    {
+        if (currHealth < playerData.maxHealthBase && currAidKitAmount > 0 && !isHealing)
+        {
+            isHealing = true;
+            StartCoroutine(HealingBoolControl(playerData.healTime));
+            InstantiateHealEffect();
+            currAidKitAmount--;
+
+            if(playerData.maxHealthBase - currHealth <= playerData.maxHealthRestoredAidKit)
+            {
+                currHealth = playerData.maxHealthBase;
+            }
+            else
+            {
+                currHealth += playerData.maxHealthRestoredAidKit;
+            }
+        }    
+    }
+
+    public void InstantiateHealEffect()
+    {
+        var effect = Instantiate(playerData.healEffect, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+
+        // pauso el efecto para pdoer cambiar la duracíon del mismo
+        effect.Stop();
+
+        // saco la referencia de la configuración para poder modificarla
+        var main = effect.main;
+        main.duration = playerData.healTime;
+        effect.Play();
+    }
+
     #endregion
 
+    #region Coroutines
+
+    public IEnumerator HealingBoolControl(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        isHealing = false;
+    }
+
+    #endregion
 }

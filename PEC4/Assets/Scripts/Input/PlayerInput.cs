@@ -49,6 +49,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""HealPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""306a8f1c-cf78-49e6-94fe-05a28f5d964b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -194,6 +202,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""CameraZoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2dffb268-2d7c-4512-908d-bcba09b127eb"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HealPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +225,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
         m_Gameplay_ReloadWeapon = m_Gameplay.FindAction("ReloadWeapon", throwIfNotFound: true);
         m_Gameplay_CameraZoom = m_Gameplay.FindAction("CameraZoom", throwIfNotFound: true);
+        m_Gameplay_HealPlayer = m_Gameplay.FindAction("HealPlayer", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -259,6 +279,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Shoot;
     private readonly InputAction m_Gameplay_ReloadWeapon;
     private readonly InputAction m_Gameplay_CameraZoom;
+    private readonly InputAction m_Gameplay_HealPlayer;
     public struct GameplayActions
     {
         private @PlayerInput m_Wrapper;
@@ -267,6 +288,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
         public InputAction @ReloadWeapon => m_Wrapper.m_Gameplay_ReloadWeapon;
         public InputAction @CameraZoom => m_Wrapper.m_Gameplay_CameraZoom;
+        public InputAction @HealPlayer => m_Wrapper.m_Gameplay_HealPlayer;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -288,6 +310,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @CameraZoom.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraZoom;
+                @HealPlayer.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHealPlayer;
+                @HealPlayer.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHealPlayer;
+                @HealPlayer.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHealPlayer;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -304,6 +329,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @CameraZoom.started += instance.OnCameraZoom;
                 @CameraZoom.performed += instance.OnCameraZoom;
                 @CameraZoom.canceled += instance.OnCameraZoom;
+                @HealPlayer.started += instance.OnHealPlayer;
+                @HealPlayer.performed += instance.OnHealPlayer;
+                @HealPlayer.canceled += instance.OnHealPlayer;
             }
         }
     }
@@ -314,5 +342,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnReloadWeapon(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
+        void OnHealPlayer(InputAction.CallbackContext context);
     }
 }

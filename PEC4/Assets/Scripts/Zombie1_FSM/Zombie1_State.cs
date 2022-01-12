@@ -34,7 +34,11 @@ public class Zombie1_State
     {
         DoChecks();
 
-        zombie1.Anim.SetBool(animBoolName, true); // ponemos el animator en true al entrar
+        // Comprobamos si el cambio tiene animación para evitar advertencias 
+        if (animBoolName != "")
+        {
+            zombie1.Anim.SetBool(animBoolName, true); // ponemos el animator en true al entrar
+        }
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
@@ -44,7 +48,12 @@ public class Zombie1_State
     // Exit() se ejecutará al salir del estado
     public virtual void Exit()
     {
-        zombie1.Anim.SetBool(animBoolName, false); // ponemos el animator en false al salir
+        // Comprobamos si el cambio tiene animación para evitar advertencias 
+        if (animBoolName != "")
+        {
+            zombie1.Anim.SetBool(animBoolName, false); // ponemos el animator en false al salir
+        }
+        
     }
 
     // LogicUpdate() se ejecutará en cada Update()

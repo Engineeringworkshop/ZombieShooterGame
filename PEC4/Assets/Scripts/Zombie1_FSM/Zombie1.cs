@@ -81,12 +81,14 @@ public class Zombie1 : MonoBehaviour, IDamageable
         PlayerDetectedState = new Zombie1_PlayerDetectedState(this, StateMachine, "", null, null);
         AttackState = new Zombie1_AttackState(this, StateMachine, "zombie1_attack", null, null);
         DeadState = new Zombie1_DeadState(this, StateMachine, "", null, null);
-        TurnState = new Zombie1_TurnState(this, StateMachine, "zombie1_turn", null, null);
+        TurnState = new Zombie1_TurnState(this, StateMachine, "", null, null);
 
         // cargamos la vida maxima en la variable y en la barra de salud
         currHealth = zombie1Data.maxHealth;
         healthBar.SetMaxHealth(currHealth);
+
         //TODO desactivar la barra de salud si el enemigo está a 100% hasta que esté dañado
+        healthBar.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -170,9 +172,15 @@ public class Zombie1 : MonoBehaviour, IDamageable
         StateMachine.ChangeState(TurnState);
     }
 
+    #endregion
+
+    #region IDamageable methods
+
     // metodo del interface IDamageable para que el zombie reciba daño 
     public void Damage(float amount)
     {
+        ActivateHealthBar();
+
         if (currHealth - amount <= 0)
         {
             // incrementamos la puntuación del jugador
@@ -194,6 +202,13 @@ public class Zombie1 : MonoBehaviour, IDamageable
 
     #endregion
 
+    private void ActivateHealthBar()
+    {
+        if (!healthBar.gameObject.activeSelf)
+        {
+            healthBar.gameObject.SetActive(true);
+        }
+    }
 
 }
 

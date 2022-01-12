@@ -3,22 +3,49 @@ using UnityEngine.UI;
 
 public class GameplayManager : MonoBehaviour
 {
+    [Header("Score display")]
+
     [SerializeField] public Text number1;
     [SerializeField] public Text number2;
     [SerializeField] public Text number3;
     [SerializeField] public Text number4;
     [SerializeField] public Text number5;
 
-    [SerializeField] readonly Player player;
+    [Header("Weapon HUD")]
+
+    [SerializeField] public Text currClipAmmo;
+    [SerializeField] public Text currClipAmmount;
+
+    [SerializeField] public HealthBar healthBarPlayer;
+
+    [SerializeField] public Text aidKitAmount;
+
+    [Header("Others")]
+
+    [SerializeField] Player player;
 
     void Start()
     {
         SplitScoreNumbers();
+
+        // Carga los datos del cargador y munición
+        //currClipAmmo.text = player.WeaponComponent.currentBulletsInMagazine.ToString();
+        //currClipAmmount.text = player.WeaponComponent.currentClipAmount.ToString();
+
+        healthBarPlayer.SetMaxHealth(player.playerData.maxHealthBase);
     }
 
     private void Update()
     {
         SplitScoreNumbers();
+
+        // Carga los datos del cargador y munición
+        currClipAmmo.text = player.WeaponComponent.currentBulletsInMagazine.ToString();
+        currClipAmmount.text = player.WeaponComponent.currentClipAmount.ToString();
+
+        aidKitAmount.text = player.currAidKitAmount.ToString();
+
+        healthBarPlayer.SetHealth(player.currHealth);
     }
 
     // Metodo para dividir el score en digitos para mostrar en el display

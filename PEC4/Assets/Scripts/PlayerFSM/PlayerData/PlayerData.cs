@@ -9,4 +9,12 @@ public class PlayerData : ScriptableObject
 {
     [Header("Move State")]
     public float movementVelocity = 10f;
+
+    [Header("Health")]
+    public float maxHealthBase = 200f;
+    public int startAidKits = 3;
+    public int maxAidKits = 5;
+    public float maxHealthRestoredAidKit = 40f;
+    public float healTime = 5f;
+    public ParticleSystem healEffect;
 }

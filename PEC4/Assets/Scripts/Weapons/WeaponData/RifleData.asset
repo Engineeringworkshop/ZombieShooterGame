@@ -15,8 +15,9 @@ MonoBehaviour:
   basePrecision: 5
   rateOfFire: 0.1
   bulletLifeTime: 8
-  magacineCapacity: 30
-  magacineReloadTime: 2
+  clipCapacity: 30
+  clipReloadTime: 2
+  clipMaxAmmount: 8
   MuzzleFlashEffect: {fileID: 8421046136046601021, guid: aea80ff1c55586e4ba1d96e00a087607, type: 3}
   AmmoClipEmpty: {fileID: 8563503114637665638, guid: 87e84817203c0c044a9d1df3c280b4de, type: 3}
   AmmoClipNotEmpty: {fileID: 8563503114637665638, guid: 429afa0421248354698207801302609b, type: 3}
