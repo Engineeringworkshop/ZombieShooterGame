@@ -1,6 +1,6 @@
 # PEC4
 
-PEC4 para la asignatura de Programación 2D. Juego propio de vista top-down. Fps de temática zombi.
+PEC4 para la asignatura de Programación 2D. Juego propio de vista top-down. Shooter de temática zombi.
 
 ## Introducción
 
