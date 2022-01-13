@@ -23,10 +23,10 @@ public class Zombie1_DeadState : Zombie1_State
         Debug.Log("estado muerte zombie");
 
         // incrementamos la puntuación del jugador
-        zombie1.player.increseScore(zombie1Data.score);
+        zombie1.player.IncreseScore(zombie1Data.score);
 
         // Sonido de muerte
-        zombie1.AudioSource.PlayOneShot(zombie1Data.DeadSound);
+        zombie1.AudioSource.PlayOneShot(zombie1Data.deadSound);
 
         // Paramos el game object
         zombie1.StopGameObject();
@@ -35,7 +35,7 @@ public class Zombie1_DeadState : Zombie1_State
         zombie1.Anim.speed = 0;
 
         // instanciamos el efecto de charco de sangre
-        zombie1.InstantiateHealEffect();
+        zombie1.InstantiateDeadEffect();
 
         // Desactivo rigidbody y colliders
         zombie1.RB.isKinematic = true;
@@ -54,7 +54,7 @@ public class Zombie1_DeadState : Zombie1_State
         zombie1.StopGameObject();
 
         // esperamos a que termine el efecto de sonido y destruimos el zombie
-        if (Time.time >= startTime + zombie1Data.DeadSound.length)
+        if (Time.time >= startTime + zombie1Data.deadSound.length)
         {
             zombie1.DestroyGameObject();
             Debug.Log("Destruido zombie");

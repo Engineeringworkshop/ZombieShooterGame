@@ -23,12 +23,12 @@ MonoBehaviour:
     m_Bits: 32768
   bloodEffect: {fileID: 7891589960742407613, guid: a0d2d3e2a6ad4dc4798e85ed67db0125, type: 3}
   deadEffect: {fileID: 7891589960742407613, guid: 5f0ff5599ee7bb04fa2412b183975688, type: 3}
-  rangeDetectionRadius: 5
+  rangeDetectionRadius: 20
   meleeRange: 2
   minMeleeDamage: 5
   maxMeleeDamage: 8
   timeBetweenAttacks: 1
   IdleRandomSound: {fileID: 8300000, guid: 70b64658ca1e3254d8e5af6b02d04b27, type: 3}
   AttackSound: {fileID: 8300000, guid: 0a382973a71835441b66ea9b989295b5, type: 3}
-  DeadSound: {fileID: 8300000, guid: 5e5f1dcf343d63d46b1558b3956c5631, type: 3}
+  deadSound: {fileID: 8300000, guid: 5e5f1dcf343d63d46b1558b3956c5631, type: 3}
   PlayerDetectedSound: {fileID: 8300000, guid: 144e5b46ce69afb4f94bc3a7a1ae4751, type: 3}

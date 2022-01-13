@@ -36,7 +36,7 @@ public class Weapon : MonoBehaviour
             ShootBullet();
         }
         // Si se ha presionado la tecla de recarga
-        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading && currentClipAmount > 0 && currentBulletsInMagazine < weaponData.clipCapacity)
+        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading && currentClipAmount > 0 && currentBulletsInMagazine < weaponData.clipCapacity && !player.isHealing)
         {
             isReloading = true;
             currentClipAmount--;
@@ -48,7 +48,7 @@ public class Weapon : MonoBehaviour
     void ShootBullet()
     {
         // Crea una bala si ha pasado el tiempo entre disparos y no está recargando
-        if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading)
+        if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading && !player.isHealing)
         {
             // Instanciamos la bala
             var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);

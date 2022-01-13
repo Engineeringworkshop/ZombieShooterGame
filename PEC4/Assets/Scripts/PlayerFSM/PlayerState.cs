@@ -23,8 +23,6 @@ public class PlayerState
     {
         this.player = player; // Referencia al jugador
         this.stateMachine = stateMachine; // Referencia a la maquina de estados
-        //this.playerData = playerData; // Referencia al archivo de datos del jugador
-        //this.gameData = gameData; // Referencia al archivo de datos del juego
         this.animBoolName = animBoolName; // nombre de la animación
         this.animFeetBoolName = animFeetBoolName; // nombre de la animación de los pies
         this.audioClip = audioClip; // Referencia al clip de audio del estado

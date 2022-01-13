@@ -83,7 +83,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
         TurnState = new Zombie1_TurnState(this, StateMachine, "", null, null, zombie1Data);
         PlayerDetectedState = new Zombie1_PlayerDetectedState(this, StateMachine, "", zombie1Data.PlayerDetectedSound, null);
         AttackState = new Zombie1_AttackState(this, StateMachine, "zombie1_attack", zombie1Data.AttackSound, null, zombie1Data);
-        DeadState = new Zombie1_DeadState(this, StateMachine, "", zombie1Data.DeadSound, null, zombie1Data);
+        DeadState = new Zombie1_DeadState(this, StateMachine, "", zombie1Data.deadSound, null, zombie1Data);
         
 
         // cargamos la vida maxima en la variable y en la barra de salud
@@ -266,7 +266,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
     }
 
     // Metodo para instanciar el efecto muerte
-    public void InstantiateHealEffect()
+    public void InstantiateDeadEffect()
     {
         var effect = Instantiate(zombie1Data.deadEffect, transform.position, transform.rotation);
 
@@ -278,7 +278,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
 
         // saco la referencia de la configuración para poder modificarla
         var main = effect.main;
-        main.duration = zombie1Data.DeadSound.length;
+        main.duration = zombie1Data.deadSound.length;
         effect.Play();
     }
 

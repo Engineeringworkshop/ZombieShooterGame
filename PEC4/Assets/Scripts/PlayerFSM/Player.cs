@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerReloadState ReloadIdleState { get; private set; }
+    public PlayerDeadState DeadState { get; private set; }
 
     #endregion
 
@@ -30,13 +31,16 @@ public class Player : MonoBehaviour, IDamageable
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
 
-    [SerializeField] GameObject feets; // referencia a los pies, para poder coger si animator
+    [SerializeField] public GameObject feets; // referencia a los pies, para poder coger si animator
     public Animator FeetAnim { get; private set; } // Referencia al animator de los pies
 
     public PlayerInput playerInput;
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
+    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
 
     [HideInInspector] public AudioSource playerAudioSource;
+
+    [HideInInspector] public BoxCollider2D playerBoxCollider2D;
 
     [SerializeField] GameplayManager gameplayManager;
 
@@ -61,6 +65,8 @@ public class Player : MonoBehaviour, IDamageable
 
     [HideInInspector] public bool isHealing;
 
+    [HideInInspector] public bool isDead;
+
     #endregion
 
     #region Unity Callback Methods
@@ -77,8 +83,10 @@ public class Player : MonoBehaviour, IDamageable
         IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
         MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", playerData.walkSound, null, playerData);
         ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", playerData.reloadWeaponSound, null, playerData);
+        DeadState = new PlayerDeadState(this, StateMachine, "", "", playerData.deadSound, null);
 
         isHealing = false;
+        isDead = false;
     }
 
     // Start 
@@ -89,6 +97,8 @@ public class Player : MonoBehaviour, IDamageable
         RB = GetComponent<Rigidbody2D>();
         playerAudioSource = GetComponent<AudioSource>();
         WeaponComponent = GetComponent<Weapon>();
+        PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
+        playerBoxCollider2D = GetComponent<BoxCollider2D>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
@@ -123,12 +133,14 @@ public class Player : MonoBehaviour, IDamageable
         if (collision.CompareTag("FirstAidKit") && currAidKitAmount < playerData.maxAidKits)
         {
             currAidKitAmount++;
-            Destroy(collision.gameObject);
+            //playerAudioSource.PlayOneShot(playerData.pickupFirstAidKit);
+            //Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("AmmoBox") && WeaponComponent.currentClipAmount < WeaponComponent.weaponData.clipMaxAmmount)
         {
             WeaponComponent.currentClipAmount++;
-            Destroy(collision.gameObject);
+            //playerAudioSource.PlayOneShot(playerData.pickupAmmo);
+            //Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("ExitLevel"))
         {
@@ -203,7 +215,7 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     // metodo para incrementar el score del jugador
-    public void increseScore(int amount)
+    public void IncreseScore(int amount)
     {
         score += amount;
         Debug.Log("Score: " + score);
@@ -218,6 +230,7 @@ public class Player : MonoBehaviour, IDamageable
             StartCoroutine(HealingBoolControl(playerData.healTime));
             InstantiateHealEffect();
             currAidKitAmount--;
+            playerAudioSource.PlayOneShot(playerData.healSound);
 
             if(playerData.maxHealthBase - currHealth <= playerData.maxHealthRestoredAidKit)
             {
@@ -279,6 +292,43 @@ public class Player : MonoBehaviour, IDamageable
     public void Damage(float amount)
     {
         currHealth -= amount;
+
+        // Si la vida llega a 0 muere
+        if(currHealth < 0 && !isDead)
+        {
+            StateMachine.ChangeState(DeadState);
+            isDead = true;
+        }
+    }
+
+    // Metodo para instanciar el efecto muerte
+    public void InstantiateDeadEffect()
+    {
+        var effect = Instantiate(playerData.deadEffect, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+
+        // pauso el efecto para pdoer cambiar la duracíon del mismo
+        effect.Stop();
+
+        // saco la referencia de la configuración para poder modificarla
+        var main = effect.main;
+        main.duration = playerData.deadSound.length;
+        effect.Play();
+    }
+    public void InstantiateDeadBody()
+    {
+        var effect = Instantiate(playerData.deadSkull, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+    }
+    public IEnumerator ReloadScene(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+
+        gameplayManager.RestartLevel();
     }
 
     #endregion

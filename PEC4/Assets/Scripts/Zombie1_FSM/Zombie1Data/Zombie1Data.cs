@@ -30,6 +30,6 @@ public class Zombie1Data : ScriptableObject
     [Header("Sounds")]
     public AudioClip IdleRandomSound;
     public AudioClip AttackSound;
-    public AudioClip DeadSound;
+    public AudioClip deadSound;
     public AudioClip PlayerDetectedSound;
 }
