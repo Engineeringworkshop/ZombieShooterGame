@@ -21,9 +21,13 @@ public class WeaponData : ScriptableObject
     public int clipMaxAmmount = 8; // Capacidad máxima de cargadores de cada arma
 
     // Configuracion multimedia
-    [Header("Multimedia")]
+    [Header("Effects")]
     public GameObject MuzzleFlashEffect;
     public ParticleSystem AmmoClipEmpty;
     public ParticleSystem AmmoClipNotEmpty;
+
+    // Sonidos
+    [Header("Sonidos")]
+    public AudioClip fireWeaponSound;
 }
 

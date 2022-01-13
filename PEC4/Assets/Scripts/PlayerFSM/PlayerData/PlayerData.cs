@@ -12,9 +12,15 @@ public class PlayerData : ScriptableObject
 
     [Header("Health")]
     public float maxHealthBase = 200f;
+    public float startHealth = 40f;
+
     public int startAidKits = 3;
     public int maxAidKits = 5;
     public float maxHealthRestoredAidKit = 40f;
     public float healTime = 5f;
     public ParticleSystem healEffect;
+
+    [Header("Sounds")]
+    public AudioClip walkSound;
+    public AudioClip reloadWeaponSound;
 }

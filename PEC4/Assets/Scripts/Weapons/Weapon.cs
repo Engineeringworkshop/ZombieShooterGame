@@ -10,22 +10,20 @@ public class Weapon : MonoBehaviour
     public GameObject bulletPrefab;
     public WeaponData weaponData;
 
-    public bool isReloading;
+    [SerializeField] public AudioSource weaponAudioSource;
+
+    [HideInInspector] public bool isReloading;
+    [HideInInspector] public bool isShooting;
 
     // Atributos
-    public int currentBulletsInMagazine; // Guarda la cantidad de balas en el cargador
+    [HideInInspector] public int currentBulletsInMagazine; // Guarda la cantidad de balas en el cargador, se inicializa desde el juagdor con prefs
+    [HideInInspector] public int currentClipAmount; //se inicializa desde el juagdor con prefs
 
-    public int currentClipAmount;
+    [HideInInspector] float prevShootTime = 0f;
 
-    float prevShootTime = 0f;
 
     private void Start()
     {
-        // el arma se inicia con el cargador lleno
-        currentBulletsInMagazine = weaponData.clipCapacity;
-
-        currentClipAmount = weaponData.clipStartAmmount;
-
         isReloading = false;
     }
     
@@ -58,6 +56,9 @@ public class Weapon : MonoBehaviour
             // Instanciamos el effecto de disparo
             var effect = Instantiate(weaponData.MuzzleFlashEffect, firePoint.position, player.transform.rotation);
             effect.transform.parent = transform;
+
+            // reproducimos el sonido
+            weaponAudioSource.PlayOneShot(weaponData.fireWeaponSound);
 
             // Rotamos la bala
             SetBulletOnDirection(bullet);

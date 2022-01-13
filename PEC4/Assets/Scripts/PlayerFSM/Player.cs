@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     #region State Variables
 
@@ -36,6 +36,10 @@ public class Player : MonoBehaviour
     public PlayerInput playerInput;
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
 
+    [HideInInspector] public AudioSource playerAudioSource;
+
+    [SerializeField] GameplayManager gameplayManager;
+
     public Weapon WeaponComponent { get; private set; }
 
     #endregion
@@ -49,13 +53,13 @@ public class Player : MonoBehaviour
 
     #region Player atributes
 
-    public float currHealth;
+    [HideInInspector] public float currHealth;
 
-    public int score;
+    [HideInInspector] public int score;
 
-    public int currAidKitAmount;
+    [HideInInspector] public int currAidKitAmount;
 
-    public bool isHealing;
+    [HideInInspector] public bool isHealing;
 
     #endregion
 
@@ -71,12 +75,8 @@ public class Player : MonoBehaviour
 
         // Creamos los objetos estado
         IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
-        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", null, null, playerData);
-        ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", null, null, playerData);
-
-        currHealth = playerData.maxHealthBase;
-
-        currAidKitAmount = playerData.startAidKits;
+        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", playerData.walkSound, null, playerData);
+        ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", playerData.reloadWeaponSound, null, playerData);
 
         isHealing = false;
     }
@@ -87,11 +87,14 @@ public class Player : MonoBehaviour
         Anim = GetComponent<Animator>();
         FeetAnim = feets.GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
-
+        playerAudioSource = GetComponent<AudioSource>();
         WeaponComponent = GetComponent<Weapon>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
+
+        // Cargamos los datos del jugador de prefs
+        LoadPlayerPrefs();
     }
 
     // En cada Update llamamos al LogicUpdate() del estado correspondiente
@@ -126,6 +129,11 @@ public class Player : MonoBehaviour
         {
             WeaponComponent.currentClipAmount++;
             Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("ExitLevel"))
+        {
+            SavePlayerPrefs();
+            gameplayManager.EndLevel();
         }
     }
 
@@ -169,6 +177,10 @@ public class Player : MonoBehaviour
         RB.velocity = workspaceVelocity;
         CurrentVelocity = workspaceVelocity;
     }
+
+    #endregion
+
+    #region Other methods
 
     // Metodo para girar el personaje en la dirección del raton.
     public void FaceMouse()
@@ -234,6 +246,26 @@ public class Player : MonoBehaviour
         effect.Play();
     }
 
+    public void LoadPlayerPrefs()
+    {
+        // cargar prefs, si no existen, se cargarán los valores por defecto
+        WeaponComponent.currentBulletsInMagazine = PlayerPrefs.GetInt("currentBulletsInMagazine", WeaponComponent.weaponData.clipCapacity);
+        WeaponComponent.currentClipAmount = PlayerPrefs.GetInt("currentClipAmount", WeaponComponent.weaponData.clipStartAmmount);
+        currAidKitAmount = PlayerPrefs.GetInt("currAidKitAmount", playerData.startAidKits);
+        currHealth = PlayerPrefs.GetFloat("currHealth", playerData.startHealth);
+        score = PlayerPrefs.GetInt("score", 0);
+    }
+
+    public void SavePlayerPrefs()
+    {
+        // guardar prefs
+        PlayerPrefs.SetInt("currentBulletsInMagazine", WeaponComponent.currentBulletsInMagazine); // balas en el cargador
+        PlayerPrefs.SetInt("currentClipAmount", WeaponComponent.currentClipAmount); // numero de cargadores
+        PlayerPrefs.SetInt("currAidKitAmount", currAidKitAmount); // numero de botiquines
+        PlayerPrefs.SetFloat("currHealth", currHealth); // vida actual
+        PlayerPrefs.SetInt("score", score); // puntuación actual
+    }
+
     #endregion
 
     #region Coroutines
@@ -242,6 +274,11 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(time);
         isHealing = false;
+    }
+
+    public void Damage(float amount)
+    {
+        currHealth -= amount;
     }
 
     #endregion

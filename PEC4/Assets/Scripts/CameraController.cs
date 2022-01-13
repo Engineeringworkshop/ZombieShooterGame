@@ -50,11 +50,5 @@ public class CameraController : MonoBehaviour
         {
             mainCamera.m_Lens.FieldOfView -= mouseScrollY * scrollSpeed;
         }
-
-       //float z = zoom.ReadValue<float>();
-        if (mouseScrollY > 0)
-            Debug.Log("Scroll UP: " + mouseScrollY);
-        else if (mouseScrollY < 0)
-            Debug.Log("Scroll DOWN: " + mouseScrollY);
     }
 }

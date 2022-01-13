@@ -25,11 +25,17 @@ public class PlayerReloadState : PlayerAbilityState
 
         player.StopPlayer(); // Paramos al jugador al entrar en el estado Idle
         feetMove = false;
+
+        // Iniciamos la reproducción de efectos de sonido
+        player.playerAudioSource.clip = audioClip;
+        player.playerAudioSource.Play();
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        player.playerAudioSource.Stop();
     }
 
     public override void LogicUpdate()

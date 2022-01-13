@@ -138,4 +138,5 @@ MonoBehaviour:
   damageMin: 5
   damageMax: 10
   maxPower: 100
+  wallImpactEffect: {fileID: 4295865070393462859, guid: 3916c4c66a1b8cb47bf2218fa6afb917, type: 3}
   currPower: 0

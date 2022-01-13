@@ -19,7 +19,12 @@ public class Zombie1_IdleState : Zombie1_State
     {
         base.Enter();
 
-        zombie1.SetVelocity(new Vector2(0f, 0f));
+        zombie1.StopGameObject();
+
+        if(Random.value > 0.8f)
+        {
+            zombie1.AudioSource.PlayOneShot(audioClip);
+        }
 
         zombie1.StartCoroutine(zombie1.ChangeToTurnStateOnTime(Random.Range(zombie1.minTimeBetweenActions, zombie1.maxTimeBetweenActions)));
     }
@@ -32,6 +37,12 @@ public class Zombie1_IdleState : Zombie1_State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (zombie1.isPlayerDetected)
+        {
+            zombie1.StopCoroutine("ChangeToTurnStateOnTime");
+            stateMachine.ChangeState(zombie1.MoveState);
+        }
     }
 
     public override void PhysicsUpdate()

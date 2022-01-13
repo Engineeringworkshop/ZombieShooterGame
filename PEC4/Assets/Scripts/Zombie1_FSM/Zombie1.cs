@@ -12,10 +12,10 @@ public class Zombie1 : MonoBehaviour, IDamageable
     // Estados
     public Zombie1_IdleState IdleState { get; private set; }
     public Zombie1_MoveState MoveState { get; private set; }
+    public Zombie1_TurnState TurnState { get; private set; }
     public Zombie1_PlayerDetectedState PlayerDetectedState { get; private set; }
     public Zombie1_AttackState AttackState { get; private set; }
     public Zombie1_DeadState DeadState { get; private set; }
-    public Zombie1_TurnState TurnState { get; private set; }
 
     #endregion
 
@@ -40,14 +40,11 @@ public class Zombie1 : MonoBehaviour, IDamageable
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
+    public AudioSource AudioSource { get; private set; }
 
     #endregion
 
     #region Atributes
-
-    private float closeRangeDetectionRadius = 3f;
-
-    public LayerMask whatsIsPlayer;
 
     public float currHealth { get; private set; } // vida actual del zombie
 
@@ -65,6 +62,11 @@ public class Zombie1 : MonoBehaviour, IDamageable
     public Vector3 targetPosition;
     public Vector3 targetDirection;
 
+    // flags
+    public bool isPlayerDetected;
+    public bool isPlayerOnMeleeRange;
+    public bool isAttackAnimationFinished;
+    public bool isDead;
 
     #endregion
 
@@ -76,19 +78,25 @@ public class Zombie1 : MonoBehaviour, IDamageable
         StateMachine = new Zombie1_StateMachine();
 
         // Creamos los objetos estado
-        IdleState = new Zombie1_IdleState(this, StateMachine, "zombie1_idle", null, null);
-        MoveState = new Zombie1_MoveState(this, StateMachine, "zombie1_move", null, null);
-        PlayerDetectedState = new Zombie1_PlayerDetectedState(this, StateMachine, "", null, null);
-        AttackState = new Zombie1_AttackState(this, StateMachine, "zombie1_attack", null, null);
-        DeadState = new Zombie1_DeadState(this, StateMachine, "", null, null);
-        TurnState = new Zombie1_TurnState(this, StateMachine, "", null, null);
+        IdleState = new Zombie1_IdleState(this, StateMachine, "zombie1_idle", zombie1Data.IdleRandomSound, null);
+        MoveState = new Zombie1_MoveState(this, StateMachine, "zombie1_move", null, null, zombie1Data);
+        TurnState = new Zombie1_TurnState(this, StateMachine, "", null, null, zombie1Data);
+        PlayerDetectedState = new Zombie1_PlayerDetectedState(this, StateMachine, "", zombie1Data.PlayerDetectedSound, null);
+        AttackState = new Zombie1_AttackState(this, StateMachine, "zombie1_attack", zombie1Data.AttackSound, null, zombie1Data);
+        DeadState = new Zombie1_DeadState(this, StateMachine, "", zombie1Data.DeadSound, null, zombie1Data);
+        
 
         // cargamos la vida maxima en la variable y en la barra de salud
         currHealth = zombie1Data.maxHealth;
         healthBar.SetMaxHealth(currHealth);
 
-        //TODO desactivar la barra de salud si el enemigo está a 100% hasta que esté dañado
+        // desactivamos la barra de salud hasta que se le haga daño
         healthBar.gameObject.SetActive(false);
+
+        isPlayerDetected = false;
+        isPlayerOnMeleeRange = false;
+        isAttackAnimationFinished = false;
+        isDead = false;
     }
 
     // Start is called before the first frame update
@@ -96,6 +104,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
     {
         Anim = GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
+        AudioSource = GetComponent<AudioSource>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
@@ -114,14 +123,19 @@ public class Zombie1 : MonoBehaviour, IDamageable
 
         CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
 
+        CheckPlayerInFrontRange();
+
         CheckPlayerInCloseRange();
     }
 
     // Dibuja en la escena
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(targetPosition, 1);
+        Gizmos.DrawWireSphere(targetPosition, 1);
         Gizmos.DrawRay(transform.position, targetDirection);
+
+        Gizmos.DrawWireSphere(transform.position, zombie1Data.rangeDetectionRadius);
+        Gizmos.DrawWireSphere(transform.position, zombie1Data.meleeRange);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -145,20 +159,40 @@ public class Zombie1 : MonoBehaviour, IDamageable
         CurrentVelocity = workspaceVelocity; //Actualizamos la velocidad actual
     }
 
-    // Metodo para detectar al jugador en rango cercano (circulo alrededor del enemigo) 
-    void CheckPlayerInCloseRange()
+    // Metodo para parar el GameObject
+    public void StopGameObject()
     {
-        var collider = Physics2D.OverlapCircle(transform.position, closeRangeDetectionRadius, whatsIsPlayer); // devovlerá true si el circulo creado toca el suelo.
-        if (collider != null && collider.CompareTag("Player"))
+        SetVelocity(new Vector2(0.0f, 0.0f));
+    }
+
+    // Metodo para detectar al jugador en rango de ataque melee) 
+    public void CheckPlayerInCloseRange()
+    {
+        if (Mathf.Abs(Vector3.Distance(transform.position, player.transform.position)) <= zombie1Data.meleeRange)
         {
-            //Debug.Log("Zombie1 ha detectado al jugador");
+            isPlayerOnMeleeRange = true;
+        }
+        else
+        {
+            isPlayerOnMeleeRange = false;
         }
     }
 
-    // metodo para detectar al jugador en rango de visión (cono en dirección frontal del enemigo)
+    // Metodo para detectar al jugador en rango cercano (circulo alrededor del enemigo) 
     void CheckPlayerInFrontRange()
     {
-        //TODO metodo para detectar al jugador en el cono de visión
+        var collider = Physics2D.OverlapCircle(transform.position, zombie1Data.rangeDetectionRadius, zombie1Data.whatsIsPlayer); // devovlerá true si el circulo creado toca el suelo.
+        if (collider != null && collider.CompareTag("Player"))
+        {
+            //Debug.Log("Zombie1 ha detectado al jugador");
+            isPlayerDetected = true;
+            targetPosition = player.transform.position;
+            targetDirection = (targetPosition - transform.position).normalized;
+        }
+        else
+        {
+            isPlayerDetected = false;
+        }
     }
 
     #endregion
@@ -179,35 +213,73 @@ public class Zombie1 : MonoBehaviour, IDamageable
     // metodo del interface IDamageable para que el zombie reciba daño 
     public void Damage(float amount)
     {
-        ActivateHealthBar();
-
-        if (currHealth - amount <= 0)
+        if (!isDead)
         {
-            // incrementamos la puntuación del jugador
-            player.increseScore(zombie1Data.score);
+            ActivateHealthBar();
 
-            // destruimos el zombie
-            Destroy(gameObject);
+            if (currHealth - amount <= 0)
+            {
+                isDead = true;
+                currHealth = 0;
+                healthBar.gameObject.SetActive(false);
+                StopAllCoroutines();
+                StateMachine.ChangeState(DeadState);
+            }
+            else
+            {
+                currHealth -= amount;
+            }
+
+            healthBar.SetHealth(currHealth);
         }
-        else
-        {
-            currHealth -= amount;
-        }
 
-        //TODO activar la barra al recibir daño
-        healthBar.SetHealth(currHealth);
-
-        //Debug.Log("Health: " + currHealth);
     }
 
     #endregion
 
+    // Metodo para activar la barra de salud del enemigo
     private void ActivateHealthBar()
     {
         if (!healthBar.gameObject.activeSelf)
         {
             healthBar.gameObject.SetActive(true);
         }
+    }
+
+    // Metodo para dañar al jugador
+    public void DamagePlayer()
+    {
+        //Debug.Log("Daño al jugador");
+        player.Damage(Random.Range(zombie1Data.minMeleeDamage, zombie1Data.maxMeleeDamage));
+    }
+
+    // Metodo para indicar que una animación ha terminado
+    public void AttackAnimationIsFinished()
+    {
+        isAttackAnimationFinished = true;
+    }
+
+    // Metodo para poder destruir el game object desde los estados
+    public void DestroyGameObject()
+    {
+        Destroy(gameObject);
+    }
+
+    // Metodo para instanciar el efecto muerte
+    public void InstantiateHealEffect()
+    {
+        var effect = Instantiate(zombie1Data.deadEffect, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+
+        // pauso el efecto para pdoer cambiar la duracíon del mismo
+        effect.Stop();
+
+        // saco la referencia de la configuración para poder modificarla
+        var main = effect.main;
+        main.duration = zombie1Data.DeadSound.length;
+        effect.Play();
     }
 
 }

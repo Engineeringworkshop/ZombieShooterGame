@@ -11,14 +11,13 @@ public class Zombie1_TurnState : Zombie1_State
 
     public float turnRadByFrames = 0.5f;
     public int amountOfSkipedFrames = 10;
+    protected Zombie1Data zombie1Data;
 
+    protected bool isValidPosition;
 
-
-    public LayerMask whatsIsBlockingWalk;
-
-
-    public Zombie1_TurnState(Zombie1 zombie1, Zombie1_StateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem) : base(zombie1, stateMachine, animBoolName, audioClip, particleSystem)
+    public Zombie1_TurnState(Zombie1 zombie1, Zombie1_StateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem, Zombie1Data zombie1Data) : base(zombie1, stateMachine, animBoolName, audioClip, particleSystem)
     {
+        this.zombie1Data = zombie1Data;
     }
 
     public override void DoChecks()
@@ -30,8 +29,9 @@ public class Zombie1_TurnState : Zombie1_State
     {
         base.Enter();
 
+        isValidPosition = false;
+
         PickRandomPosition();
-        CheckValidPosition();
     }
 
     public override void Exit()
@@ -43,7 +43,7 @@ public class Zombie1_TurnState : Zombie1_State
     {
         base.LogicUpdate();
 
-        if (Vector3.Angle(zombie1.transform.right, zombie1.targetDirection) < 0.1)
+        if (isValidPosition)
         {
             stateMachine.ChangeState(zombie1.MoveState);
         }
@@ -70,26 +70,29 @@ public class Zombie1_TurnState : Zombie1_State
             // Calculamos la posición objetivo
             zombie1.targetPosition = zombie1.transform.position + distance * dir;
 
-        } while (!CheckValidPosition());
+            // Guardamos la dirección del objetivo
+            zombie1.targetDirection = dir;
 
-        // Guardamos la dirección del objetivo
-        zombie1.targetDirection = dir;
+            isValidPosition = CheckValidPosition();
+
+        } while (!isValidPosition);
 
         // Giramos el zombie
         zombie1.transform.right = zombie1.targetDirection;
     }
 
-    // Metodo para comprobar que es una posición destino válida
+    // Metodo para comprobar que es una posición destino es válida
     private bool CheckValidPosition()
     {
-        var col = Physics2D.OverlapCircle(zombie1.targetPosition, 3f, whatsIsBlockingWalk);
-        if (col == null)
+        RaycastHit2D hit = Physics2D.CircleCast(zombie1.targetPosition, 1f, zombie1.targetDirection, Vector3.Distance(zombie1.targetPosition, zombie1.transform.position), zombie1Data.whatsIsBlockingWalk);
+
+        if (hit.collider != null && hit.collider.tag == "Walls")
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 }

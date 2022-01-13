@@ -7,6 +7,8 @@ TagManager:
   - Bullet
   - FirstAidKit
   - AmmoBox
+  - Walls
+  - ExitLevel
   layers:
   - Default
   - TransparentFX
@@ -21,11 +23,11 @@ TagManager:
   - Floor
   - 
   - 
-  - 
+  - Walls
   - 
   - Player
   - 
-  - 
+  - Enemies
   - 
   - 
   - 
@@ -61,4 +63,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 2114710145
+    locked: 0
+  - name: Walls
+    uniqueID: 1494255029
     locked: 0

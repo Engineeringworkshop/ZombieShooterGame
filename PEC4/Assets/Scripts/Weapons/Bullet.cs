@@ -14,6 +14,8 @@ public class Bullet : MonoBehaviour
 
     public float maxPower = 100;
 
+    public ParticleSystem wallImpactEffect;
+
     // Atributos
 
     public float currPower; // Capacidad de hacer daño de la bala
@@ -44,6 +46,12 @@ public class Bullet : MonoBehaviour
         {
             // calcula el daño del impacto y lo realiza
             damageable.Damage(ImpactDamage());
+        }
+        else if (collision.CompareTag("Walls"))
+        {
+            Instantiate(wallImpactEffect, transform.position, transform.rotation);
+
+            Destroy(gameObject);
         }
     }
 
