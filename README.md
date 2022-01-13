@@ -13,8 +13,9 @@ dy a pro? Just edit this README.md and make it your own. Want to make it easy? [
 
 ## Enlaces del juego
 
-YouTube: https://youtu.be/Wk0ZQU5bvZ8
-GitLab: https://gitlab.com/pmolinapa/pec3/-/tree/Corregir
+YouTube: https://youtu.be/fixtAjOeKMs
+
+GitLab: https://gitlab.com/pmolinapa/pec4/-/tree/Corregir/
 
 ## Controles
 
