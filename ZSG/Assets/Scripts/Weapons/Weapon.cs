@@ -6,11 +6,11 @@ using UnityEngine.InputSystem;
 public class Weapon : MonoBehaviour
 {
     public Transform firePoint;
-    public Player player;
+    [HideInInspector] public Player player;
     public GameObject bulletPrefab;
     public WeaponData weaponData;
 
-    [SerializeField] public AudioSource weaponAudioSource;
+    [HideInInspector] public AudioSource weaponAudioSource;
 
     [HideInInspector] public bool isReloading;
     [HideInInspector] public bool isShooting;
@@ -24,55 +24,42 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        player = GetComponent<Player>();
+        weaponAudioSource = GetComponent<AudioSource>();
         isReloading = false;
-    }
-    
-
-    void Update()
-    {
-        // Si se ha presionado la tecla de disparo
-        if (player.playerInput.Gameplay.Shoot.ReadValue<float>() > 0.5f)
-        {
-            ShootBullet();
-        }
-        // Si se ha presionado la tecla de recarga
-        else if (player.playerInput.Gameplay.ReloadWeapon.ReadValue<float>() > 0.5f && !isReloading && currentClipAmount > 0 && currentBulletsInMagazine < weaponData.clipCapacity && !player.isHealing)
-        {
-            isReloading = true;
-            currentClipAmount--;
-            ReloadWeapon();
-        }
     }
 
     // Metodo para instanciar una bala
     void ShootBullet()
     {
-        // Crea una bala si ha pasado el tiempo entre disparos y no está recargando
-        if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading && !player.isHealing)
+        if (!GameplayManager.gameIsPaused)
         {
-            // Instanciamos la bala
-            var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            // Crea una bala si ha pasado el tiempo entre disparos y no está recargando
+            if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading && !player.isHealing)
+            {
+                // Instanciamos la bala
+                var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-            // Instanciamos el effecto de disparo
-            var effect = Instantiate(weaponData.MuzzleFlashEffect, firePoint.position, player.transform.rotation);
-            effect.transform.parent = transform;
+                // Instanciamos el effecto de disparo
+                var effect = Instantiate(weaponData.MuzzleFlashEffect, firePoint.position, player.transform.rotation);
+                effect.transform.parent = transform;
 
-            // reproducimos el sonido
-            weaponAudioSource.PlayOneShot(weaponData.fireWeaponSound);
+                // reproducimos el sonido
+                weaponAudioSource.PlayOneShot(weaponData.fireWeaponSound);
 
-            // Rotamos la bala
-            SetBulletOnDirection(bullet);
+                // Rotamos la bala
+                SetBulletOnDirection(bullet);
 
-            // Programamos la destrucción de la bala
-            StartCoroutine(DestroyBullet(bullet));
-            prevShootTime = Time.time;
-            currentBulletsInMagazine--;
+                // Programamos la destrucción de la bala
+                StartCoroutine(DestroyBullet(bullet));
+                prevShootTime = Time.time;
+                currentBulletsInMagazine--;
+            }
+            else if (currentBulletsInMagazine == 0)
+            {
+                // TODO ruido de gatillo sin disparo
+            }
         }
-        else if (currentBulletsInMagazine == 0)
-        {
-            // TODO ruido de gatillo sin disparo
-        }
-        
     }
 
     // Coroutine para auto destruir una bala una vez pasado el tiempo 
@@ -83,16 +70,22 @@ public class Weapon : MonoBehaviour
     }
 
     // Metodo para recargar el arma
-    void ReloadWeapon()
+    public void ReloadWeapon()
     {
-        StartCoroutine(ReloadWeaponTimer());
-        if (currentBulletsInMagazine > 0)
+        if (!GameplayManager.gameIsPaused && !isReloading && currentClipAmount > 0 && currentBulletsInMagazine < weaponData.clipCapacity && !player.isHealing)
         {
-            StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipNotEmpty));
-        }
-        else
-        {
-            StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipEmpty));
+            isReloading = true;
+            currentClipAmount--;
+            StartCoroutine(ReloadWeaponTimer());
+            //player.StateMachine.ChangeState(player.ReloadIdleState);
+            if (currentBulletsInMagazine > 0)
+            {
+                StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipNotEmpty));
+            }
+            else
+            {
+                StartCoroutine(InstantiateAmmoClip(weaponData.AmmoClipEmpty));
+            }
         }
     }
 

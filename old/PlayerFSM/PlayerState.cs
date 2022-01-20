@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // interface para cada player state (estado de jugador) 
@@ -15,8 +17,6 @@ public class PlayerState
 
     private string animBoolName; // En esta variable se guardará informacion para las animaciones, así el animator sabrá que animación deberá usar.
     private string animFeetBoolName; // Variable para el animator d elos pies
-
-    protected Vector2 moveInput; // Vector velocidad del input de los controles
 
     // Constructor de estados
     public PlayerState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem)
@@ -37,28 +37,24 @@ public class PlayerState
         DoChecks();
 
         player.Anim.SetBool(animBoolName, true); // ponemos el animator en true al entrar
-        //player.FeetAnim.SetBool(animFeetBoolName, true);
+        player.FeetAnim.SetBool(animFeetBoolName, true);
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
-        Debug.Log(animBoolName);
+        //Debug.Log(animBoolName);
     }
 
     // Exit() se ejecutará al salir del estado
     public virtual void Exit()
     {
         player.Anim.SetBool(animBoolName, false); // ponemos el animator en false al salir
-        //player.FeetAnim.SetBool(animFeetBoolName, false);
+        player.FeetAnim.SetBool(animFeetBoolName, false);
     }
 
     // LogicUpdate() se ejecutará en cada Update()
     public virtual void LogicUpdate()
     {
-        // Guardamos el input de velocidad de los controles
-        moveInput = player.playerInputController.RawMovementInput;
 
-        // El juagdor siempre tiene que mirar hacia el raton
-        player.FaceMouse();
     }
 
     // PhysicsUpdate se ejecutará en cada FixedUpdate()

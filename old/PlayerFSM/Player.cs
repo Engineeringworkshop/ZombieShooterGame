@@ -9,12 +9,12 @@ public class Player : MonoBehaviour, IDamageable
 
     // Variable para la maquina de estados
     public PlayerStateMachine StateMachine { get; private set; } // Objeto de maquina de estados
-
+    
     // Estados
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
-    //public PlayerReloadState ReloadIdleState { get; private set; }
-    //public PlayerDeadState DeadState { get; private set; }
+    public PlayerReloadState ReloadIdleState { get; private set; }
+    public PlayerDeadState DeadState { get; private set; }
 
     #endregion
 
@@ -23,7 +23,7 @@ public class Player : MonoBehaviour, IDamageable
     [Header("Data")]
 
     [SerializeField] public PlayerData playerData;
-
+    
     #endregion
 
     #region Componentes
@@ -31,20 +31,16 @@ public class Player : MonoBehaviour, IDamageable
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
 
-    //[SerializeField] public GameObject feets; // referencia a los pies, para poder coger si animator
-    //public Animator FeetAnim { get; private set; } // Referencia al animator de los pies
+    [SerializeField] public GameObject feets; // referencia a los pies, para poder coger si animator
+    public Animator FeetAnim { get; private set; } // Referencia al animator de los pies
 
     public PlayerInput playerInput;
-
-    [HideInInspector] public PlayerInputController playerInputController;
-
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
-    //public SpriteRenderer PlayerSpriteRenderer { get; private set; }
+    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
 
     [HideInInspector] public AudioSource playerAudioSource;
 
-
-    //[HideInInspector] public BoxCollider2D playerBoxCollider2D;
+    [HideInInspector] public BoxCollider2D playerBoxCollider2D;
 
     [SerializeField] GameplayManager gameplayManager;
 
@@ -86,8 +82,8 @@ public class Player : MonoBehaviour, IDamageable
         // Creamos los objetos estado
         IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
         MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", playerData.walkSound, null, playerData);
-        //ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", playerData.reloadWeaponSound, null, playerData);
-        //DeadState = new PlayerDeadState(this, StateMachine, "", "", playerData.deadSound, null);
+        ReloadIdleState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", playerData.reloadWeaponSound, null, playerData);
+        DeadState = new PlayerDeadState(this, StateMachine, "", "", playerData.deadSound, null);
 
         isHealing = false;
         isDead = false;
@@ -97,14 +93,12 @@ public class Player : MonoBehaviour, IDamageable
     void Start()
     {
         Anim = GetComponent<Animator>();
-        //FeetAnim = feets.GetComponent<Animator>();
+        FeetAnim = feets.GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
         playerAudioSource = GetComponent<AudioSource>();
         WeaponComponent = GetComponent<Weapon>();
-        //PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
-        //playerBoxCollider2D = GetComponent<BoxCollider2D>();
-
-        playerInputController = GetComponent<PlayerInputController>();
+        PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
+        playerBoxCollider2D = GetComponent<BoxCollider2D>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
@@ -117,14 +111,16 @@ public class Player : MonoBehaviour, IDamageable
     void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
-
-        CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
     }
 
     // En cada Update llamamos al PhysicsUpdate() del estado correspondiente
     private void FixedUpdate()
     {
         StateMachine.CurrentState.PhysicsUpdate();
+
+        CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
+
+        FaceMouse(); // Gira el personaje para que apunte a la posición del cursor.
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -162,7 +158,7 @@ public class Player : MonoBehaviour, IDamageable
 
     #endregion
 
-    #region Movement & orientation
+    #region Set Functions
 
     // Metodo para modificar la velocidad de movimiento en ambas direcciones, horizontal y vertical
     public void SetVelocity(Vector2 velocity)
@@ -172,11 +168,25 @@ public class Player : MonoBehaviour, IDamageable
         CurrentVelocity = workspaceVelocity; //Actualizamos la velocidad actual
     }
 
-    // Metodo para parar al jugador
-    public void StopPlayer()
+    // Metodo para modificar la velocidad de movimiento horizontal
+    public void SetVelocityX(float velocity)
     {
-        SetVelocity(new Vector2(0.0f, 0.0f));
+        workspaceVelocity.Set(velocity, CurrentVelocity.y);
+        RB.velocity = workspaceVelocity; //Actualziamos la velocidad del player
+        CurrentVelocity = workspaceVelocity; //Actualizamos la velocidad actual
     }
+
+    // Metodo para calcular la velocidad de movimiento vertical
+    public void SetVelocityY(float velocity)
+    {
+        workspaceVelocity.Set(CurrentVelocity.x, velocity);
+        RB.velocity = workspaceVelocity;
+        CurrentVelocity = workspaceVelocity;
+    }
+
+    #endregion
+
+    #region Other methods
 
     // Metodo para girar el personaje en la dirección del raton.
     public void FaceMouse()
@@ -192,23 +202,18 @@ public class Player : MonoBehaviour, IDamageable
         transform.right = direction;
     }
 
-    #endregion
-
-    #region Gameplay methods
-
-    public void IncreseScore(int scoreIncrese)
+    // Metodo para parar al jugador
+    public void StopPlayer()
     {
-
+        SetVelocity(new Vector2(0f, 0f)); // Paramos el movimiento si pasa a idle state
     }
 
-    public void Damage(float amount)
+    // metodo para incrementar el score del jugador
+    public void IncreseScore(int amount)
     {
-        
+        score += amount;
+        Debug.Log("Score: " + score);
     }
-
-    #endregion
-
-    #region Heal methods
 
     // metodo para curar al jugador
     public void HealPlayer()
@@ -221,7 +226,7 @@ public class Player : MonoBehaviour, IDamageable
             currAidKitAmount--;
             playerAudioSource.PlayOneShot(playerData.healSound);
 
-            if (playerData.maxHealthBase - currHealth <= playerData.maxHealthRestoredAidKit)
+            if(playerData.maxHealthBase - currHealth <= playerData.maxHealthRestoredAidKit)
             {
                 currHealth = playerData.maxHealthBase;
             }
@@ -229,17 +234,9 @@ public class Player : MonoBehaviour, IDamageable
             {
                 currHealth += playerData.maxHealthRestoredAidKit;
             }
-        }
+        }    
     }
 
-    // coroutine para controlar el tiempo de animación de la curación
-    public IEnumerator HealingBoolControl(float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-        isHealing = false;
-    }
-
-    // Methodo para instanciar el efecto de curación
     public void InstantiateHealEffect()
     {
         var effect = Instantiate(playerData.healEffect, transform.position, transform.rotation);
@@ -255,10 +252,6 @@ public class Player : MonoBehaviour, IDamageable
         main.duration = playerData.healTime;
         effect.Play();
     }
-
-    #endregion
-
-    #region PlayerPrefs
 
     public void LoadPlayerPrefs()
     {
@@ -278,6 +271,59 @@ public class Player : MonoBehaviour, IDamageable
         PlayerPrefs.SetInt("currAidKitAmount", currAidKitAmount); // numero de botiquines
         PlayerPrefs.SetFloat("currHealth", currHealth); // vida actual
         PlayerPrefs.SetInt("score", score); // puntuación actual
+    }
+
+    #endregion
+
+    #region Coroutines
+
+    public IEnumerator HealingBoolControl(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        isHealing = false;
+    }
+
+    public void Damage(float amount)
+    {
+        currHealth -= amount;
+
+        // Si la vida llega a 0 muere
+        if(currHealth < 0 && !isDead)
+        {
+            StateMachine.ChangeState(DeadState);
+            isDead = true;
+            gameplayManager.ActivateDeadFrame();
+        }
+    }
+
+    // Metodo para instanciar el efecto muerte
+    public void InstantiateDeadEffect()
+    {
+        var effect = Instantiate(playerData.deadEffect, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+
+        // pauso el efecto para pdoer cambiar la duracíon del mismo
+        effect.Stop();
+
+        // saco la referencia de la configuración para poder modificarla
+        var main = effect.main;
+        main.duration = playerData.deadSound.length;
+        effect.Play();
+    }
+    public void InstantiateDeadBody()
+    {
+        var effect = Instantiate(playerData.deadSkull, transform.position, transform.rotation);
+
+        // Convierto el efecto en hijo del jugador par aque lo siga
+        effect.transform.parent = transform;
+    }
+    public IEnumerator ReloadScene(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+
+        gameplayManager.RestartLevel();
     }
 
     #endregion

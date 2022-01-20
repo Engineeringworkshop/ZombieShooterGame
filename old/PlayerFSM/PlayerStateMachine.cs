@@ -1,3 +1,4 @@
+
 // Contendrá las referencias de cualquier estado en el que esté
 public class PlayerStateMachine
 {

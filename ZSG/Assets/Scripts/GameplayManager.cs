@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class GameplayManager : MonoBehaviour
 {
+    // Variables estáticas
+
+    public static bool gameIsPaused;
+
     [Header("Score display")]
 
     [SerializeField] public Text number1;
@@ -13,7 +17,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] public Text number4;
     [SerializeField] public Text number5;
 
-    [Header("Weapon HUD")]
+    [Header("HUD")]
 
     [SerializeField] public Text currClipAmmo;
     [SerializeField] public Text currClipAmmount;
@@ -22,20 +26,24 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] public Text aidKitAmount;
 
+    [SerializeField] public GameObject deadFrame;
+
     [Header("Sounds")]
 
     [SerializeField] public AudioClip victorySound;
     [SerializeField] public AudioClip defeatSound;
 
-    [Header("Sounds")]
+    [Header("GameMenu")]
 
     [SerializeField] public GameObject gameMenu;
-    [SerializeField] public GameObject deadFrame;
+
+    [SerializeField] public Button continueButton;
+    [SerializeField] public Button exitButton;
+    [SerializeField] public Button resetLevelButton;
 
     [Header("Others")]
 
     [SerializeField] Player player;
-
 
     // Atributos internos
 
@@ -43,6 +51,8 @@ public class GameplayManager : MonoBehaviour
 
     void Start()
     {
+        gameIsPaused = false;
+
         SplitScoreNumbers();
 
         audioSource = GetComponent<AudioSource>();
@@ -111,6 +121,23 @@ public class GameplayManager : MonoBehaviour
     public void ActivateDeadFrame()
     {
         deadFrame.SetActive(true);
+    }
+    
+    // Metodo para activar/desactivar el menú en el juego
+    public void GameMenu()
+    {
+        if (gameMenu.activeSelf)
+        {
+            gameIsPaused = false;
+            gameMenu.SetActive(false);
+            Time.timeScale = 1;
+        }
+        else
+        {
+            gameIsPaused = true;
+            gameMenu.SetActive(true);
+            Time.timeScale = 0;
+        }  
     }
 
     #region Coroutines
