@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 5330188335610940557}
   - component: {fileID: 5330188335610940562}
   - component: {fileID: 1507811950969291158}
+  - component: {fileID: 1601645847813864784}
   m_Layer: 17
-  m_Name: Zombie
+  m_Name: ZombieBeta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,6 +130,7 @@ MonoBehaviour:
   isPlayerDetected: 0
   isPlayerOnMeleeRange: 0
   isAttackAnimationFinished: 0
+  isDead: 0
 --- !u!50 &5330188335610940557
 Rigidbody2D:
   serializedVersion: 4
@@ -262,6 +264,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!195 &1601645847813864784
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330188335610940552}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.59
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2.94
+  m_BaseOffset: 1.47
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &5330188335418536825
 PrefabInstance:
   m_ObjectHideFlags: 0

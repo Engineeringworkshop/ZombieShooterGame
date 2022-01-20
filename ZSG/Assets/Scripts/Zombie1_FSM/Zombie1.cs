@@ -165,7 +165,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
         SetVelocity(new Vector2(0.0f, 0.0f));
     }
 
-    // Metodo para detectar al jugador en rango de ataque melee) 
+    // Metodo para detectar al jugador en rango de ataque melee
     public void CheckPlayerInCloseRange()
     {
         if (Mathf.Abs(Vector3.Distance(transform.position, player.transform.position)) <= zombie1Data.meleeRange)
@@ -181,7 +181,7 @@ public class Zombie1 : MonoBehaviour, IDamageable
     // Metodo para detectar al jugador en rango cercano (circulo alrededor del enemigo) 
     void CheckPlayerInFrontRange()
     {
-        var collider = Physics2D.OverlapCircle(transform.position, zombie1Data.rangeDetectionRadius, zombie1Data.whatsIsPlayer); // devovlerá true si el circulo creado toca el suelo.
+        var collider = Physics2D.OverlapCircle(transform.position, zombie1Data.rangeDetectionRadius, zombie1Data.whatsIsPlayer); 
         if (collider != null && collider.CompareTag("Player"))
         {
             //Debug.Log("Zombie1 ha detectado al jugador");

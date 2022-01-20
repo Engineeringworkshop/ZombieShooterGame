@@ -132,15 +132,14 @@ public class Player : MonoBehaviour, IDamageable
     {
         if (collision.CompareTag("FirstAidKit") && currAidKitAmount < playerData.maxAidKits)
         {
+            // aumenta la cantidad en 1 e invoca el metodo de recoleccion del item
             currAidKitAmount++;
-            //playerAudioSource.PlayOneShot(playerData.pickupFirstAidKit);
-            //Destroy(collision.gameObject);
+            collision.GetComponent<PickableController>().PickupItem(this);
         }
         else if (collision.CompareTag("AmmoBox") && WeaponComponent.currentClipAmount < WeaponComponent.weaponData.clipMaxAmmount)
         {
             WeaponComponent.currentClipAmount++;
-            //playerAudioSource.PlayOneShot(playerData.pickupAmmo);
-            //Destroy(collision.gameObject);
+            collision.GetComponent<PickableController>().PickupItem(this);
         }
         else if (collision.CompareTag("ExitLevel"))
         {
@@ -298,6 +297,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             StateMachine.ChangeState(DeadState);
             isDead = true;
+            gameplayManager.ActivateDeadFrame();
         }
     }
 

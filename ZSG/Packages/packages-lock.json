@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.h8man.2d.navmeshplus": {
+      "version": "file:E:/Bibliotecas/Unity/Packages/NavMeshPlus-master",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "5.0.7",
       "depth": 0,

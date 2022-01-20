@@ -26,6 +26,7 @@ public class Zombie1_IdleState : Zombie1_State
             zombie1.AudioSource.PlayOneShot(audioClip);
         }
 
+        // Temporizador para cambiar de estado
         zombie1.StartCoroutine(zombie1.ChangeToTurnStateOnTime(Random.Range(zombie1.minTimeBetweenActions, zombie1.maxTimeBetweenActions)));
     }
 

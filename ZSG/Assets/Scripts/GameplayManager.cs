@@ -18,7 +18,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] public Text currClipAmmo;
     [SerializeField] public Text currClipAmmount;
 
-    [SerializeField] public HealthBar healthBarPlayer;
+    [SerializeField] public PlayerHealthBar playerHealthBarPlayer;
 
     [SerializeField] public Text aidKitAmount;
 
@@ -27,9 +27,17 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] public AudioClip victorySound;
     [SerializeField] public AudioClip defeatSound;
 
+    [Header("Sounds")]
+
+    [SerializeField] public GameObject gameMenu;
+    [SerializeField] public GameObject deadFrame;
+
     [Header("Others")]
 
     [SerializeField] Player player;
+
+
+    // Atributos internos
 
     [HideInInspector] AudioSource audioSource;
 
@@ -39,7 +47,10 @@ public class GameplayManager : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
 
-        healthBarPlayer.SetMaxHealth(player.playerData.maxHealthBase);
+        playerHealthBarPlayer.SetMaxHealth(player.playerData.maxHealthBase);
+
+        gameMenu.SetActive(false);
+        deadFrame.SetActive(false);
     }
 
     private void Update()
@@ -52,7 +63,7 @@ public class GameplayManager : MonoBehaviour
 
         aidKitAmount.text = player.currAidKitAmount.ToString();
 
-        healthBarPlayer.SetHealth(player.currHealth);
+        playerHealthBarPlayer.SetHealth(player.currHealth);
     }
 
     // Metodo para dividir el score en digitos para mostrar en el display
@@ -96,10 +107,18 @@ public class GameplayManager : MonoBehaviour
         StartCoroutine(ReloadLevel());
     }
 
+    // Metodo para activar el dead frame
+    public void ActivateDeadFrame()
+    {
+        deadFrame.SetActive(true);
+    }
+
+    #region Coroutines
+
     // Metodo para cargar el siguiente nivel despues de un tiempo
     public IEnumerator LoadNextLevel()
     {
-        yield return new WaitForSecondsRealtime(5.0f);
+        yield return new WaitForSecondsRealtime(3.0f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -109,4 +128,6 @@ public class GameplayManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(5.0f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    #endregion
 }

@@ -4,6 +4,19 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     public Slider slider;
+    public Vector3 offset;
+
+    RectTransform rectTransform;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+    }
+    private void Update()
+    {
+        //slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);        
+        rectTransform.anchoredPosition = transform.parent.localPosition;
+    }
 
     // Metodo para definir el valor maximo (vida maxima) del slider
     public void SetMaxHealth(float health)

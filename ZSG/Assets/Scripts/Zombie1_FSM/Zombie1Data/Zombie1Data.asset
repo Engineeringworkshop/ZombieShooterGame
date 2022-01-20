@@ -23,8 +23,8 @@ MonoBehaviour:
     m_Bits: 32768
   bloodEffect: {fileID: 7891589960742407613, guid: a0d2d3e2a6ad4dc4798e85ed67db0125, type: 3}
   deadEffect: {fileID: 7891589960742407613, guid: 5f0ff5599ee7bb04fa2412b183975688, type: 3}
-  rangeDetectionRadius: 20
-  meleeRange: 2
+  rangeDetectionRadius: 7
+  meleeRange: 2.5
   minMeleeDamage: 5
   maxMeleeDamage: 8
   timeBetweenAttacks: 1
