@@ -42,7 +42,7 @@ public class Enemy_State
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
-        Debug.Log("Enemy: " + animBoolName);
+        //Debug.Log("Enemy: " + animBoolName);
     }
 
     // Exit() se ejecutará al salir del estado

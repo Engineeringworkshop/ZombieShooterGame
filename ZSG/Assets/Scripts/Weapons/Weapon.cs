@@ -29,10 +29,18 @@ public class Weapon : MonoBehaviour
         isReloading = false;
     }
 
-    // Metodo para instanciar una bala
-    void ShootBullet()
+    private void Update()
     {
-        if (!GameplayManager.gameIsPaused)
+        if (player.playerInputController.IsShooting)
+        {
+            ShootBullet();
+        }
+    }
+
+    // Metodo para instanciar una bala
+    public void ShootBullet()
+    {
+        if (!GameplayManager.gameIsPaused && player.playerInputController.IsShooting)
         {
             // Crea una bala si ha pasado el tiempo entre disparos y no está recargando
             if (currentBulletsInMagazine > 0 && Time.time >= prevShootTime + weaponData.rateOfFire && !isReloading && !player.isHealing)

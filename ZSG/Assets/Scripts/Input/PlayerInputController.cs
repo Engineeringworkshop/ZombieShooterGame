@@ -9,6 +9,8 @@ public class PlayerInputController : MonoBehaviour
 
     public Vector2 RawMovementInput { get; private set; }
 
+    [HideInInspector] public bool IsShooting { get; private set; }
+
     private void Start()
     {
         player = GetComponent<Player>();
@@ -18,27 +20,29 @@ public class PlayerInputController : MonoBehaviour
     {
         RawMovementInput = value.Get<Vector2>();
     }
-    void OnShoot()
-    {
 
+    void OnShoot(InputValue value)
+    {
+        IsShooting = value.isPressed;
     }
+
     void OnReloadWeapon()
     {
-        Debug.Log("Reload");
         player.WeaponComponent.ReloadWeapon();
     }
+
     void OnCameraZoom()
     {
-
+        // Programado dentro de la cámara
     }
+
     void OnHealPlayer()
     {
         player.HealPlayer();
     }
+
     void OnGameMenu()
     {
-
+        player.gameplayManager.GameMenu();
     }
-
-
 }

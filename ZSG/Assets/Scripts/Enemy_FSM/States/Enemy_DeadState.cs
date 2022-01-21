@@ -17,8 +17,6 @@ public class Enemy_DeadState : Enemy_State
     {
         base.Enter();
 
-        Debug.Log("estado muerte zombie");
-
         // incrementamos la puntuación del jugador
         enemy.player.IncreseScore(enemy.enemyData.score);
 
@@ -53,7 +51,7 @@ public class Enemy_DeadState : Enemy_State
         if (Time.time >= startTime + enemy.enemyData.deadSound.length)
         {
             enemy.DestroyGameObject();
-            Debug.Log("Destruido zombie");
+            //Debug.Log("Destruido zombie");
         }
     }
 

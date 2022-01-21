@@ -30,10 +30,22 @@ public class PlayerMoveState : PlayerState
     {
         base.LogicUpdate();
 
-        if (moveInput.sqrMagnitude <= Mathf.Epsilon)
+        // si el jugador está muerto
+        if (player.isDead)
+        {
+            stateMachine.ChangeState(player.DeadState);
+        }
+        // Si no hay input de movimiento
+        else if (moveInput.sqrMagnitude <= Mathf.Epsilon)
         {
             stateMachine.ChangeState(player.IdleState);
         }
+        // Si está recargando
+        else if (player.WeaponComponent.isReloading)
+        {
+            stateMachine.ChangeState(player.ReloadState);
+        }
+
     }
 
     public override void PhysicsUpdate()

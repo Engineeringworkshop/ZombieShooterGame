@@ -43,7 +43,7 @@ public class Enemy_MoveState : Enemy_State
 
         if (enemy.Agent.remainingDistance < 0.5f && !enemy.isPlayerDetected)
         {
-            Debug.Log("remaining distance" + enemy.Agent.remainingDistance + "Epsilon: " + Mathf.Epsilon);
+            //Debug.Log("remaining distance" + enemy.Agent.remainingDistance + "Epsilon: " + Mathf.Epsilon);
             stateMachine.ChangeState(enemy.IdleState);
         }
         else if (enemy.isPlayerOnMeleeRange && !enemy.player.isDead)

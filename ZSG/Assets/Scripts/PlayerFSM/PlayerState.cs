@@ -59,6 +59,8 @@ public class PlayerState
 
         // El juagdor siempre tiene que mirar hacia el raton
         player.FaceMouse();
+
+        //
     }
 
     // PhysicsUpdate se ejecutará en cada FixedUpdate()
