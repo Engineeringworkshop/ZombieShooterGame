@@ -12,6 +12,8 @@ public class Feet : MonoBehaviour
     // Estados
     public FeetIdleState IdleState { get; private set; }
     public FeetMoveState MoveState { get; private set; }
+    public FeetStrafeRightState StrafeRightState { get; private set; }
+    public FeetStrafeLeftState StrafeLeftState { get; private set; }
 
     #endregion
 
@@ -23,6 +25,9 @@ public class Feet : MonoBehaviour
 
     #endregion
 
+    // Variables
+    [HideInInspector] public Vector2 RawInput { get; private set; }
+
     #region Unity Callback Methods
 
     private void Awake()
@@ -33,6 +38,8 @@ public class Feet : MonoBehaviour
         // Creamos los objetos estado
         IdleState = new FeetIdleState(this, StateMachine, "idle_feet", null, null);
         MoveState = new FeetMoveState(this, StateMachine, "move_feet", null, null);
+        StrafeRightState = new FeetStrafeRightState(this, StateMachine, "strafe_right_feet", null, null);
+        StrafeLeftState = new FeetStrafeLeftState(this, StateMachine, "strafe_left_feet", null, null);
     }
 
     void Start()
@@ -47,6 +54,8 @@ public class Feet : MonoBehaviour
     void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
+
+        RawInput = player.playerInputController.RawMovementInput;
     }
 
     #endregion

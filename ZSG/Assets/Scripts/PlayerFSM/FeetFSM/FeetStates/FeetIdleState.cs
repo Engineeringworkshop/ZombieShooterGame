@@ -21,9 +21,17 @@ public class FeetIdleState : FeetState
         base.LogicUpdate();
 
         // Si recibe input de movimiento 
-        if (feet.player.playerInputController.RawMovementInput.sqrMagnitude >= Mathf.Epsilon)
+        /*if (verticalInput != 0.0f && horizontalInput == 0)
         {
             stateMachine.ChangeState(feet.MoveState);
         }
+        else if (horizontalInput > 0.0f)
+        {
+            stateMachine.ChangeState(feet.StrafeRightState);
+        }
+        else if (horizontalInput < 0.0f)
+        {
+            stateMachine.ChangeState(feet.StrafeLeftState);
+        }*/
     }
 }
