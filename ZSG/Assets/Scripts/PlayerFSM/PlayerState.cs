@@ -14,17 +14,15 @@ public class PlayerState
     protected float startTime; // Referencia para saber cuanto lleva en cada estado
 
     private string animBoolName; // En esta variable se guardará informacion para las animaciones, así el animator sabrá que animación deberá usar.
-    private string animFeetBoolName; // Variable para el animator d elos pies
 
     protected Vector2 moveInput; // Vector velocidad del input de los controles
 
     // Constructor de estados
-    public PlayerState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem)
+    public PlayerState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem)
     {
         this.player = player; // Referencia al jugador
         this.stateMachine = stateMachine; // Referencia a la maquina de estados
         this.animBoolName = animBoolName; // nombre de la animación
-        this.animFeetBoolName = animFeetBoolName; // nombre de la animación de los pies
         this.audioClip = audioClip; // Referencia al clip de audio del estado
         this.particleSystem = particleSystem; // Referencia al sistema de particulas
     }
@@ -37,7 +35,6 @@ public class PlayerState
         DoChecks();
 
         player.Anim.SetBool(animBoolName, true); // ponemos el animator en true al entrar
-        //player.FeetAnim.SetBool(animFeetBoolName, true);
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
@@ -48,7 +45,6 @@ public class PlayerState
     public virtual void Exit()
     {
         player.Anim.SetBool(animBoolName, false); // ponemos el animator en false al salir
-        //player.FeetAnim.SetBool(animFeetBoolName, false);
     }
 
     // LogicUpdate() se ejecutará en cada Update()

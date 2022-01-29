@@ -128,15 +128,13 @@ public class GameplayManager : MonoBehaviour
     {
         if (gameMenu.activeSelf)
         {
-            gameIsPaused = false;
+            PauseGame();
             gameMenu.SetActive(false);
-            Time.timeScale = 1;
         }
         else
         {
-            gameIsPaused = true;
+            PauseGame();
             gameMenu.SetActive(true);
-            Time.timeScale = 0;
         }  
     }
 
@@ -154,6 +152,23 @@ public class GameplayManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(5.0f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // Metodo para pausar el juego
+    public void PauseGame()
+    {
+        gameIsPaused = !gameIsPaused;
+
+        if (gameIsPaused)
+        {
+            gameIsPaused = true;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            gameIsPaused = false;
+            Time.timeScale = 1;
+        }
     }
 
     #endregion

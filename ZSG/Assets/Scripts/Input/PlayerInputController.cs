@@ -16,6 +16,7 @@ public class PlayerInputController : MonoBehaviour
         player = GetComponent<Player>();
     }
 
+
     void OnMovement(InputValue value)
     {
         RawMovementInput = value.Get<Vector2>();
@@ -44,5 +45,18 @@ public class PlayerInputController : MonoBehaviour
     void OnGameMenu()
     {
         player.gameplayManager.GameMenu();
+    }
+
+    void OnPrimaryWeapon()
+    {
+        player.PrimaryWeapon();
+    }
+    void OnSecondaryWeapon()
+    {
+        player.SecondaryWeapon();
+    }
+    void OnKnifeWeapon()
+    {
+
     }
 }

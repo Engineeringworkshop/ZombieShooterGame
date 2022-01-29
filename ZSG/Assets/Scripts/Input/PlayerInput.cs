@@ -65,6 +65,38 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PrimaryWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f75fc06-fda7-4f9b-8984-cd39920ded91"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SecondaryWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfcb0505-3547-4e31-9b43-ef38ec46fc9c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""KnifeWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""76e85076-846e-4fd9-b5f3-0f044aa3890a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""43c09b57-a132-491e-8cdf-cd2ff202bafe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -232,6 +264,50 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""GameMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e15fc40-7a1d-47ba-9e2b-3edbc77acadc"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""568e99ea-671b-4f2c-9089-82958d2a794d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee2c0116-cf92-49d9-8ddc-8bdd5e798a8c"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KnifeWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83a47600-1093-4210-bba3-e60ebd80662a"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -246,6 +322,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Gameplay_CameraZoom = m_Gameplay.FindAction("CameraZoom", throwIfNotFound: true);
         m_Gameplay_HealPlayer = m_Gameplay.FindAction("HealPlayer", throwIfNotFound: true);
         m_Gameplay_GameMenu = m_Gameplay.FindAction("GameMenu", throwIfNotFound: true);
+        m_Gameplay_PrimaryWeapon = m_Gameplay.FindAction("PrimaryWeapon", throwIfNotFound: true);
+        m_Gameplay_SecondaryWeapon = m_Gameplay.FindAction("SecondaryWeapon", throwIfNotFound: true);
+        m_Gameplay_KnifeWeapon = m_Gameplay.FindAction("KnifeWeapon", throwIfNotFound: true);
+        m_Gameplay_Inventory = m_Gameplay.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -301,6 +381,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_CameraZoom;
     private readonly InputAction m_Gameplay_HealPlayer;
     private readonly InputAction m_Gameplay_GameMenu;
+    private readonly InputAction m_Gameplay_PrimaryWeapon;
+    private readonly InputAction m_Gameplay_SecondaryWeapon;
+    private readonly InputAction m_Gameplay_KnifeWeapon;
+    private readonly InputAction m_Gameplay_Inventory;
     public struct GameplayActions
     {
         private @PlayerInput m_Wrapper;
@@ -311,6 +395,10 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @CameraZoom => m_Wrapper.m_Gameplay_CameraZoom;
         public InputAction @HealPlayer => m_Wrapper.m_Gameplay_HealPlayer;
         public InputAction @GameMenu => m_Wrapper.m_Gameplay_GameMenu;
+        public InputAction @PrimaryWeapon => m_Wrapper.m_Gameplay_PrimaryWeapon;
+        public InputAction @SecondaryWeapon => m_Wrapper.m_Gameplay_SecondaryWeapon;
+        public InputAction @KnifeWeapon => m_Wrapper.m_Gameplay_KnifeWeapon;
+        public InputAction @Inventory => m_Wrapper.m_Gameplay_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -338,6 +426,18 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @GameMenu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGameMenu;
                 @GameMenu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGameMenu;
                 @GameMenu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGameMenu;
+                @PrimaryWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryWeapon;
+                @PrimaryWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryWeapon;
+                @PrimaryWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPrimaryWeapon;
+                @SecondaryWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryWeapon;
+                @SecondaryWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryWeapon;
+                @SecondaryWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSecondaryWeapon;
+                @KnifeWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKnifeWeapon;
+                @KnifeWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKnifeWeapon;
+                @KnifeWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKnifeWeapon;
+                @Inventory.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInventory;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -360,6 +460,18 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @GameMenu.started += instance.OnGameMenu;
                 @GameMenu.performed += instance.OnGameMenu;
                 @GameMenu.canceled += instance.OnGameMenu;
+                @PrimaryWeapon.started += instance.OnPrimaryWeapon;
+                @PrimaryWeapon.performed += instance.OnPrimaryWeapon;
+                @PrimaryWeapon.canceled += instance.OnPrimaryWeapon;
+                @SecondaryWeapon.started += instance.OnSecondaryWeapon;
+                @SecondaryWeapon.performed += instance.OnSecondaryWeapon;
+                @SecondaryWeapon.canceled += instance.OnSecondaryWeapon;
+                @KnifeWeapon.started += instance.OnKnifeWeapon;
+                @KnifeWeapon.performed += instance.OnKnifeWeapon;
+                @KnifeWeapon.canceled += instance.OnKnifeWeapon;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
@@ -372,5 +484,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnHealPlayer(InputAction.CallbackContext context);
         void OnGameMenu(InputAction.CallbackContext context);
+        void OnPrimaryWeapon(InputAction.CallbackContext context);
+        void OnSecondaryWeapon(InputAction.CallbackContext context);
+        void OnKnifeWeapon(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

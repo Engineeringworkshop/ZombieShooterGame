@@ -9,6 +9,7 @@ TagManager:
   - AmmoBox
   - Walls
   - ExitLevel
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - 
   - 
   - Walls
-  - 
+  - Pickables
   - Player
   - 
   - Enemies

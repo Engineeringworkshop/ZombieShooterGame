@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerReloadState : PlayerState
 {
     protected PlayerData playerData;
-    public PlayerReloadState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, animFeetBoolName, audioClip, particleSystem)
+    public PlayerReloadState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
     {
         this.playerData = playerData;
     }

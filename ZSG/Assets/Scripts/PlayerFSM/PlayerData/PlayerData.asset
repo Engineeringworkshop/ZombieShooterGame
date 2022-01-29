@@ -26,3 +26,5 @@ MonoBehaviour:
   deadSound: {fileID: 8300000, guid: 019e8b1dea28c484d90230df1ec2d616, type: 3}
   deadEffect: {fileID: 7891589960742407613, guid: 5f0ff5599ee7bb04fa2412b183975688, type: 3}
   deadSkull: {fileID: 4857674475522093261, guid: c5d538a5f618b294c8c41c26aa7cc523, type: 3}
+  primaryWeapon: {fileID: 9100000, guid: 1093a8e6121fe9a4083d89ba3826ab84, type: 2}
+  secondaryWeapon: {fileID: 9100000, guid: 092cfed12c36ce74b96bfa2ed5d5ce75, type: 2}

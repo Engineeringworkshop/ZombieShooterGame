@@ -41,11 +41,14 @@ public class Player : MonoBehaviour, IDamageable
     public Rigidbody2D RB { get; private set; } //Referencia al rigidbody2D para controlar las fisicas del player
     public SpriteRenderer PlayerSpriteRenderer { get; private set; }
 
+
     [HideInInspector] public AudioSource playerAudioSource;
 
     [HideInInspector] public BoxCollider2D playerBoxCollider2D;
 
     [SerializeField] public GameplayManager gameplayManager;
+
+    
 
     public Weapon WeaponComponent { get; private set; }
 
@@ -83,10 +86,12 @@ public class Player : MonoBehaviour, IDamageable
         playerInput = new PlayerInput();
 
         // Creamos los objetos estado
-        IdleState = new PlayerIdleState(this, StateMachine, "idle_rifle", "idle_feet", null, null);
-        MoveState = new PlayerMoveState(this, StateMachine, "move_rifle", "move_feet", playerData.walkSound, null, playerData);
-        ReloadState = new PlayerReloadState(this, StateMachine, "reload_rifle", "idle_feet", playerData.reloadWeaponSound, null, playerData);
-        DeadState = new PlayerDeadState(this, StateMachine, "", "", playerData.deadSound, null);
+        IdleState = new PlayerIdleState(this, StateMachine, "idle", null, null);
+        MoveState = new PlayerMoveState(this, StateMachine, "move", playerData.walkSound, null, playerData);
+        ReloadState = new PlayerReloadState(this, StateMachine, "reload", playerData.reloadWeaponSound, null, playerData);
+        //melee
+        //shoot
+        DeadState = new PlayerDeadState(this, StateMachine, "", playerData.deadSound, null);
 
         isHealing = false;
         isDead = false;
@@ -296,6 +301,20 @@ public class Player : MonoBehaviour, IDamageable
         yield return new WaitForSecondsRealtime(time);
 
         gameplayManager.RestartLevel();
+    }
+
+    #endregion
+
+    #region Weapons
+
+    public void PrimaryWeapon()
+    {
+        Anim.runtimeAnimatorController = playerData.primaryWeapon;
+    }
+
+    public void SecondaryWeapon()
+    {
+        Anim.runtimeAnimatorController = playerData.secondaryWeapon;
     }
 
     #endregion

@@ -6,7 +6,7 @@ public class PlayerMoveState : PlayerState
 {
     protected PlayerData playerData;
 
-    public PlayerMoveState(Player player, PlayerStateMachine stateMachine, string animBoolName, string animFeetBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, animFeetBoolName, audioClip, particleSystem)
+    public PlayerMoveState(Player player, PlayerStateMachine stateMachine, string animBoolName, AudioClip audioClip, ParticleSystem particleSystem, PlayerData playerData) : base(player, stateMachine, animBoolName, audioClip, particleSystem)
     {
         this.playerData = playerData;
     }

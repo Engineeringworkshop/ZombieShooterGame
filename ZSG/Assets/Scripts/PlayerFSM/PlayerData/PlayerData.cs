@@ -31,4 +31,8 @@ public class PlayerData : ScriptableObject
     public AudioClip deadSound;
     public ParticleSystem deadEffect;
     public ParticleSystem deadSkull;
+
+    [Header("Nimator controlers")]
+    public RuntimeAnimatorController primaryWeapon;
+    public RuntimeAnimatorController secondaryWeapon;
 }
