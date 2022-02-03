@@ -7,6 +7,10 @@ public class PlayerInputController : MonoBehaviour
 {
     Player player;
 
+    [SerializeField] GameObject inventoryPanel;
+    [SerializeField] GameObject equipmentAndStatsPanel;
+    [SerializeField] GameObject craftingPanel;
+
     public Vector2 RawMovementInput { get; private set; }
 
     [HideInInspector] public bool IsShooting { get; private set; }
@@ -44,7 +48,10 @@ public class PlayerInputController : MonoBehaviour
 
     void OnGameMenu()
     {
-        player.gameplayManager.GameMenu();
+        //player.gameplayManager.GameMenu();
+
+        //player.playerInput.Gameplay.Disable();
+        //player.playerInput.MenuInventory.Enable();
     }
 
     void OnPrimaryWeapon()
@@ -58,5 +65,30 @@ public class PlayerInputController : MonoBehaviour
     void OnKnifeWeapon()
     {
 
+    }
+
+    void OnInventoryOpen()
+    {
+        //Debug.Log(player.playerInput.currentActionMap);
+        inventoryPanel.gameObject.SetActive(true);
+        equipmentAndStatsPanel.SetActive(true);
+        craftingPanel.SetActive(true);
+        player.playerInput.SwitchCurrentActionMap("MenuAndInventory");
+        //Debug.Log(player.playerInput.currentActionMap);
+        //player.playerInput.Gameplay.Disable();
+        //player.playerInput.MenuAndInventory.Enable();
+    }
+
+    void OnInventoryClose()
+    {
+        //equipmentPanelGameObject.SetActive(false);
+        //characterPanelGameObject.SetActive(false);
+
+        //Debug.Log(player.playerInput.currentActionMap);
+        inventoryPanel.gameObject.SetActive(false);
+        equipmentAndStatsPanel.SetActive(false);
+        craftingPanel.SetActive(false);
+        player.playerInput.SwitchCurrentActionMap("Gameplay");
+        //Debug.Log(player.playerInput.currentActionMap);
     }
 }

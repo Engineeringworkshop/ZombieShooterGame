@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class IntroGamePlayManager : MonoBehaviour
@@ -8,7 +9,7 @@ public class IntroGamePlayManager : MonoBehaviour
     private void Awake()
     {
         // Creamos el mapa de acciones (controles)
-        introInput = new PlayerInput();
+        introInput = new PlayerInput(); //TODO arreglar pulsar una tecla para salir de la escena de introdicción
     }
 
     // Update is called once per frame
@@ -25,12 +26,12 @@ public class IntroGamePlayManager : MonoBehaviour
     private void OnEnable()
     {
         // Activamos el mapa de acciones
-        introInput.Gameplay.Enable();
+        //introInput.Gameplay.Enable();
     }
 
     private void OnDisable()
     {
         // Desactivamos el mapa de acciones
-        introInput.Gameplay.Disable();
+        //introInput.Gameplay.Disable();
     }
 }

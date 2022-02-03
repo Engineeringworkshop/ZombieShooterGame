@@ -48,7 +48,7 @@ public class Player : MonoBehaviour, IDamageable
 
     [SerializeField] public GameplayManager gameplayManager;
 
-    
+    [SerializeField] public Character character;
 
     public Weapon WeaponComponent { get; private set; }
 
@@ -83,7 +83,7 @@ public class Player : MonoBehaviour, IDamageable
         StateMachine = new PlayerStateMachine();
 
         // Creamos el mapa de acciones (controles)
-        playerInput = new PlayerInput();
+        //playerInput = new PlayerInput();
 
         // Creamos los objetos estado
         IdleState = new PlayerIdleState(this, StateMachine, "idle", null, null);
@@ -108,7 +108,11 @@ public class Player : MonoBehaviour, IDamageable
         PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerBoxCollider2D = GetComponent<BoxCollider2D>();
 
+        playerInput = GetComponent<PlayerInput>();
+
         playerInputController = GetComponent<PlayerInputController>();
+
+        character = GetComponent<Character>();
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
@@ -151,19 +155,19 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-
+    
     private void OnEnable()
     {
         // Activamos el mapa de acciones
-        playerInput.Gameplay.Enable();
+        //playerInput.
     }
 
     private void OnDisable()
     {
         // Desactivamos el mapa de acciones
-        playerInput.Gameplay.Disable();
+        //playerInput.Gameplay.Disable();
     }
-
+    
     #endregion
 
     #region Movement & orientation

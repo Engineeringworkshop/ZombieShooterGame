@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Cinemachine;
 
 public class CameraController : MonoBehaviour
@@ -14,25 +13,8 @@ public class CameraController : MonoBehaviour
     public float minSizeValue = 4.0f;
     public float maxSizeValue = 20.0f;
 
-    #region Enable/Disable
-    private void OnEnable()
-    {
-        playerInput.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInput.Disable();
-    }
-
-    #endregion
-
-    // Start is called before the first frame update
     void Awake()
     {
-        // Creamos el mapa de acciones (controles)
-        playerInput = new PlayerInput();
-
         mainCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
@@ -40,15 +22,28 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         // Obtenemos el movimiento de los controles
-        float mouseScrollY = playerInput.Gameplay.CameraZoom.ReadValue<float>() / 120f;
+        //mouseScrollY = 0f; //playerInput.Gameplay.CameraZoom.ReadValue<float>() / 120f;
+        //TODO arreglar zoom raton
 
+
+    }
+
+    void OnCameraZoom(InputValue value)
+    {
+        Debug.Log("Camerazoom");
+        float mouseScrollY = value.Get<float>() / 120f;
+        SetCameraZoom(mouseScrollY);
+    }
+
+    private void SetCameraZoom(float zoomValue)
+    {
         if (mainCamera.m_Lens.Orthographic)
         {
-            mainCamera.m_Lens.OrthographicSize = Mathf.Clamp(mainCamera.m_Lens.OrthographicSize - mouseScrollY * scrollSpeed, minSizeValue, maxSizeValue); 
+            mainCamera.m_Lens.OrthographicSize = Mathf.Clamp(mainCamera.m_Lens.OrthographicSize - zoomValue * scrollSpeed, minSizeValue, maxSizeValue);
         }
         else
         {
-            mainCamera.m_Lens.FieldOfView -= mouseScrollY * scrollSpeed;
+            mainCamera.m_Lens.FieldOfView -= zoomValue * scrollSpeed;
         }
     }
 }
