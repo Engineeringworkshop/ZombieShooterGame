@@ -4,8 +4,6 @@ using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    public PlayerInput playerInput;
-
     private CinemachineVirtualCamera mainCamera;
 
     public float scrollSpeed = 1.0f;
@@ -18,23 +16,15 @@ public class CameraController : MonoBehaviour
         mainCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // Obtenemos el movimiento de los controles
-        //mouseScrollY = 0f; //playerInput.Gameplay.CameraZoom.ReadValue<float>() / 120f;
-        //TODO arreglar zoom raton
-
-
-    }
-
-    void OnCameraZoom(InputValue value)
+    // Metodo para leer el imput de la rueda del ratón
+    public void OnCameraZoom(InputAction.CallbackContext context)
     {
         Debug.Log("Camerazoom");
-        float mouseScrollY = value.Get<float>() / 120f;
+        float mouseScrollY = context.ReadValue<float>() / 120f;
         SetCameraZoom(mouseScrollY);
     }
 
+    // metodo para mover el zoom de la cámara según el valor dado
     private void SetCameraZoom(float zoomValue)
     {
         if (mainCamera.m_Lens.Orthographic)

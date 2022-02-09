@@ -10,32 +10,22 @@ public class InventoryInput : MonoBehaviour
 	[SerializeField] bool showAndHideMouse = true;
 	[SerializeField] Player player;
 
-	[SerializeField] PlayerInput playerUIInput;
-
-    private void Start()
+    private void OnValidate()
     {
-		playerUIInput = GetComponent<PlayerInput>();
+		if (player != null)
+        {
+			player = FindObjectOfType<Player>();
+		}	
+    }
 
-	}
-    void Update()
-	{
-		//ToggleCharacterPanel();
-		//ToggleInventory();
-	}
-
-	// Metodo para cambiar el estado del inventario, si está activo -> desactivado, si está desactivado -> activado
-	void OnInventoryClose()
+    // Metodo para cambiar el estado del inventario, si está activo -> desactivado, si está desactivado -> activado
+    void OnInventoryClose()
     {
-		//equipmentPanelGameObject.SetActive(false);
-		//characterPanelGameObject.SetActive(false);
-
 		Debug.Log(player.playerInput.currentActionMap);
 		player.character.Inventory.gameObject.SetActive(false);
 		player.character.EquipmentPanel.gameObject.SetActive(false);
 		player.playerInput.SwitchCurrentActionMap("Gameplay");
 		Debug.Log(player.playerInput.currentActionMap);
-		//player.playerInput.MenuAndInventory.Disable();
-		//player.playerInput.Gameplay.Enable();
 
 
 		/*

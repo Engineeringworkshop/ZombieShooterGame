@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,88 +5,110 @@ public class PlayerInputController : MonoBehaviour
 {
     Player player;
 
-    [SerializeField] GameObject inventoryPanel;
-    [SerializeField] GameObject equipmentAndStatsPanel;
-    [SerializeField] GameObject craftingPanel;
+    [SerializeField] ScreenFrameController screenFrameController;
 
     public Vector2 RawMovementInput { get; private set; }
 
     [HideInInspector] public bool IsShooting { get; private set; }
+
+    private void OnValidate()
+    {
+        if (screenFrameController == null)
+        {
+            screenFrameController = FindObjectOfType<ScreenFrameController>(includeInactive: true);
+        }
+    }
 
     private void Start()
     {
         player = GetComponent<Player>();
     }
 
-
-    void OnMovement(InputValue value)
+    private void Update()
     {
-        RawMovementInput = value.Get<Vector2>();
+        Debug.Log(player.playerInput.currentActionMap);
     }
 
-    void OnShoot(InputValue value)
+    public void OnMovement(InputAction.CallbackContext context)
     {
-        IsShooting = value.isPressed;
+        RawMovementInput = context.ReadValue<Vector2>();
     }
 
-    void OnReloadWeapon()
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        IsShooting = context.ReadValueAsButton();
+    }
+
+    public void OnReloadWeapon(InputAction.CallbackContext context)
     {
         player.WeaponComponent.ReloadWeapon();
     }
 
-    void OnCameraZoom()
-    {
-        // Programado dentro de la cámara
-    }
-
-    void OnHealPlayer()
+    public void OnHealPlayer(InputAction.CallbackContext context)
     {
         player.HealPlayer();
     }
 
-    void OnGameMenu()
+    public void OnOpenGameMenu(InputAction.CallbackContext context)
     {
-        //player.gameplayManager.GameMenu();
-
-        //player.playerInput.Gameplay.Disable();
-        //player.playerInput.MenuInventory.Enable();
+        // Tenemos que asegurarnos que solo haga el cambio de mapa una vez por frame o dará un problema de overflow (player.gameplayManager.OpenGameMenu();) podría ir fuera del if
+        if (context.started)
+        {
+            screenFrameController.EnableGameMenu();
+        }
     }
 
-    void OnPrimaryWeapon()
+    public void OnCloseGameMenu(InputAction.CallbackContext context)
+    {
+        // Tenemos que asegurarnos que solo haga el cambio de mapa una vez por frame o dará un problema de overflow (player.gameplayManager.OpenGameMenu();) podría ir fuera del if
+        if (context.started)
+        {
+            screenFrameController.DisableGameMenu();
+
+            //Cierra toda las ventanas abiertas con escape
+            screenFrameController.DisableAllPanels();
+        }
+    }
+
+    public void OnPrimaryWeapon(InputAction.CallbackContext context)
     {
         player.PrimaryWeapon();
     }
-    void OnSecondaryWeapon()
+    public void OnSecondaryWeapon(InputAction.CallbackContext context)
     {
         player.SecondaryWeapon();
     }
-    void OnKnifeWeapon()
+    public void OnKnifeWeapon(InputAction.CallbackContext context)
     {
 
     }
 
-    void OnInventoryOpen()
+    public void OnInventoryOpen(InputAction.CallbackContext context)
     {
-        //Debug.Log(player.playerInput.currentActionMap);
-        inventoryPanel.gameObject.SetActive(true);
-        equipmentAndStatsPanel.SetActive(true);
-        craftingPanel.SetActive(true);
-        player.playerInput.SwitchCurrentActionMap("MenuAndInventory");
-        //Debug.Log(player.playerInput.currentActionMap);
-        //player.playerInput.Gameplay.Disable();
-        //player.playerInput.MenuAndInventory.Enable();
+        // Tenemos que asegurarnos que solo haga el cambio de mapa una vez por frame o dará un problema de overflow (player.gameplayManager.OpenGameMenu();) podría ir fuera del if
+        if (context.started)
+        {
+            // Toggle a los paneles (se activarán)
+            screenFrameController.EnableInventoryPanel();
+            screenFrameController.EnableEquipmentAndStatsPanel();
+        }
     }
 
-    void OnInventoryClose()
+    public void OnInventoryClose(InputAction.CallbackContext context)
     {
-        //equipmentPanelGameObject.SetActive(false);
-        //characterPanelGameObject.SetActive(false);
+        // Tenemos que asegurarnos que solo haga el cambio de mapa una vez por frame o dará un problema de overflow (player.gameplayManager.OpenGameMenu();) podría ir fuera del if
+        if (context.started)
+        {
+            // Toggle a los paneles (se cerrarán)
+            screenFrameController.DisableInventoryPanel();
+            screenFrameController.DisableEquipmentAndStatsPanel();
+            //screenFrameController.ToggleCraftingPanel();
+        }
+    }
 
-        //Debug.Log(player.playerInput.currentActionMap);
-        inventoryPanel.gameObject.SetActive(false);
-        equipmentAndStatsPanel.SetActive(false);
-        craftingPanel.SetActive(false);
-        player.playerInput.SwitchCurrentActionMap("Gameplay");
-        //Debug.Log(player.playerInput.currentActionMap);
+    // Método para cambiar de mapa de acciones
+    public void SwitchActionMap(string actionMap)
+    {
+        player.playerInput.SwitchCurrentActionMap(actionMap);
     }
 }

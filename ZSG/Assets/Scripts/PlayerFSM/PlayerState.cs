@@ -38,7 +38,7 @@ public class PlayerState
 
         startTime = Time.time; // Guardamos el instante en el que entra al estado
 
-        Debug.Log(animBoolName);
+        //Debug.Log(animBoolName);
     }
 
     // Exit() se ejecutará al salir del estado

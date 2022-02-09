@@ -24,7 +24,7 @@ public class PlayerDeadState : PlayerState
         player.RB.isKinematic = true;
         player.PlayerSpriteRenderer.enabled = false;
         //player.feets.SetActive(false);
-        player.playerBoxCollider2D.enabled = false;
+        player.playerCapsuleCollider2D.enabled = false;
 
         // Invocar charco de sangre y cadaver
         player.InstantiateDeadEffect();

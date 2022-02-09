@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "ControlSchemes",
     "maps": [
         {
             "name": "Gameplay",
@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "GameMenu",
+                    "name": "OpenGameMenu",
                     "type": "Button",
                     "id": "26331139-aaf1-42d3-9234-32fe7540aa96",
                     "expectedControlType": "Button",
@@ -81,6 +81,14 @@
                     "name": "InventoryOpen",
                     "type": "Button",
                     "id": "43c09b57-a132-491e-8cdf-cd2ff202bafe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "2e4f0cfd-9ead-482f-9a49-fcded08f9b8a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -248,7 +256,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "GameMenu",
+                    "action": "OpenGameMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -295,6 +303,17 @@
                     "action": "InventoryOpen",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2fe8fec0-7c8e-4bdf-af29-0a3dbcfec415",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -306,6 +325,14 @@
                     "name": "InventoryClose",
                     "type": "Button",
                     "id": "31986dbe-da48-48d4-8bd1-9dfe05553b69",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CloseGameMenu",
+                    "type": "Button",
+                    "id": "9c6e64a5-77de-42eb-991b-3bd039e99c64",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -325,12 +352,12 @@
                 },
                 {
                     "name": "",
-                    "id": "e2467e61-8bc5-4202-8d0a-263af32838dc",
+                    "id": "3ea840f4-cbdf-43fd-9dea-0e095062a331",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "InventoryClose",
+                    "action": "CloseGameMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

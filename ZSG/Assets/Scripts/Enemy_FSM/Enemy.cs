@@ -58,6 +58,14 @@ public class Enemy : MonoBehaviour, IDamageable
 
     #endregion
 
+    private void OnValidate()
+    {
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>(includeInactive: true);
+        }
+    }
+
     #region Unity Callbacks
     private void Awake()
     {

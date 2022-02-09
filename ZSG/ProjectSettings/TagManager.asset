@@ -10,6 +10,8 @@ TagManager:
   - Walls
   - ExitLevel
   - Item
+  - PickableItem
+  - MyObjectName
   layers:
   - Default
   - TransparentFX
@@ -30,7 +32,7 @@ TagManager:
   - 
   - Enemies
   - 
-  - 
+  - Interactables
   - 
   - Effects
   - 
@@ -59,12 +61,15 @@ TagManager:
   - name: Pickables
     uniqueID: 2416667363
     locked: 0
+  - name: Bench
+    uniqueID: 1978243569
+    locked: 0
   - name: Effects
     uniqueID: 3879721445
     locked: 0
-  - name: UI
-    uniqueID: 2114710145
-    locked: 0
   - name: Walls
     uniqueID: 1494255029
+    locked: 0
+  - name: UI
+    uniqueID: 2114710145
     locked: 0

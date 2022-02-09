@@ -16,24 +16,71 @@ public class Character : MonoBehaviour
 	public Inventory Inventory;
 	public EquipmentPanel EquipmentPanel;
 
-	[Header("Serialize Field")]
+	[Header("Inventory, stat panel, crafting...")]
 	[SerializeField] CraftingWindow craftingWindow;
 	[SerializeField] StatPanel statPanel;
 	[SerializeField] ItemTooltip itemTooltip;
-	[SerializeField] Image draggableItem;
 	[SerializeField] DropItemArea dropItemArea;
 	[SerializeField] QuestionDialog reallyDropItemDialog;
 	[SerializeField] ItemSaveManager itemSaveManager;
+	[SerializeField] DraggableItemController draggableItem;
 
 	private BaseItemSlot dragItemSlot;
 
-	private void OnValidate()
+    #region OnValidate
+
+    private void OnValidate()
 	{
+        if (Inventory == null)
+        {
+			Inventory = FindObjectOfType<Inventory>(includeInactive: true);
+        }
+
+        if (EquipmentPanel == null)
+        {
+			EquipmentPanel = FindObjectOfType<EquipmentPanel>(includeInactive: true);
+        }
+
+        if (craftingWindow == null)
+        {
+			craftingWindow = FindObjectOfType<CraftingWindow>(includeInactive: true);
+        }
+
+        if (statPanel == null)
+        {
+			statPanel = FindObjectOfType<StatPanel>(includeInactive: true);
+        }
+
 		if (itemTooltip == null)
-			itemTooltip = FindObjectOfType<ItemTooltip>();
+        {
+			itemTooltip = FindObjectOfType<ItemTooltip>(includeInactive: true);
+		}
+
+        if (dropItemArea == null)
+        {
+			dropItemArea = FindObjectOfType<DropItemArea>(includeInactive: true);
+        }
+
+        if (reallyDropItemDialog == null)
+        {
+			reallyDropItemDialog = FindObjectOfType<QuestionDialog>(includeInactive: true);
+		}
+
+		if (itemSaveManager == null)
+        {
+			itemSaveManager = FindObjectOfType<ItemSaveManager>(includeInactive: true);
+        }
+
+		if (draggableItem == null)
+        {
+			draggableItem = FindObjectOfType<DraggableItemController>(includeInactive: true);
+        }
+			
 	}
 
-	private void Awake()
+    #endregion
+
+    private void Awake()
 	{
 		statPanel.SetStats(Strength, Agility, Intelligence, Vitality);
 		statPanel.UpdateStatValues();
@@ -131,21 +178,21 @@ public class Character : MonoBehaviour
 		if (itemSlot.Item != null)
 		{
 			dragItemSlot = itemSlot;
-			draggableItem.sprite = itemSlot.Item.Icon;
-			draggableItem.transform.position = Input.mousePosition;
-			draggableItem.gameObject.SetActive(true);
+
+			draggableItem.DraggableItemBeginDrag(itemSlot.Item.Icon);
 		}
 	}
 
 	private void Drag(BaseItemSlot itemSlot)
 	{
-		draggableItem.transform.position = Input.mousePosition;
+		draggableItem.DraggableItemDrag();
 	}
 
 	private void EndDrag(BaseItemSlot itemSlot)
 	{
 		dragItemSlot = null;
-		draggableItem.gameObject.SetActive(false);
+
+		draggableItem.DraggableItemEndDrag();
 	}
 
 	private void Drop(BaseItemSlot dropItemSlot)

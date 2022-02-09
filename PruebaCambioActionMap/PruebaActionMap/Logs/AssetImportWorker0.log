@@ -136,3 +136,4 @@ Received Import Request.
 Start importing Assets/Scripts/BasicMovement.cs using Guid(8b002917edc0fbe46bc01bb704a7fcd5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a43961445a4f8ee872608cb92e4d1be1') in 0.034826 seconds 
   Import took 0.039049 seconds .
 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

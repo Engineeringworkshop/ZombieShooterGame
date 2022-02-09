@@ -31,10 +31,7 @@ public class Player : MonoBehaviour, IDamageable
     // Creamos las referencias a componentes
     public Animator Anim { get; private set; } // Referencia al animator
 
-    //[SerializeField] public GameObject feets; // referencia a los pies, para poder coger si animator
-    //public Animator FeetAnim { get; private set; } // Referencia al animator de los pies
-
-    public PlayerInput playerInput;
+    [HideInInspector] public PlayerInput playerInput;
 
     [HideInInspector] public PlayerInputController playerInputController;
 
@@ -44,11 +41,15 @@ public class Player : MonoBehaviour, IDamageable
 
     [HideInInspector] public AudioSource playerAudioSource;
 
-    [HideInInspector] public BoxCollider2D playerBoxCollider2D;
+    [HideInInspector] public CapsuleCollider2D playerCapsuleCollider2D;
 
     [SerializeField] public GameplayManager gameplayManager;
 
     [SerializeField] public Character character;
+
+    [SerializeField] HUDController hudController;
+
+    [SerializeField] ScoreController scoreController;
 
     public Weapon WeaponComponent { get; private set; }
 
@@ -77,13 +78,33 @@ public class Player : MonoBehaviour, IDamageable
 
     #region Unity Callback Methods
 
+    private void OnValidate()
+    {
+        if (character == null)
+        {
+            character = FindObjectOfType<Character>(includeInactive: true);
+        }
+
+        if (hudController == null)
+        {
+            hudController = FindObjectOfType<HUDController>(includeInactive: true);
+        }
+
+        if (scoreController == null)
+        {
+            scoreController = FindObjectOfType<ScoreController>(includeInactive: true);
+        }
+
+        if (gameplayManager == null)
+        {
+            gameplayManager = FindObjectOfType<GameplayManager>(includeInactive: true);
+        }
+    }
+
     private void Awake()
     {
         // Creamos el objeto state machine
         StateMachine = new PlayerStateMachine();
-
-        // Creamos el mapa de acciones (controles)
-        //playerInput = new PlayerInput();
 
         // Creamos los objetos estado
         IdleState = new PlayerIdleState(this, StateMachine, "idle", null, null);
@@ -101,12 +122,11 @@ public class Player : MonoBehaviour, IDamageable
     void Start()
     {
         Anim = GetComponent<Animator>();
-        //FeetAnim = feets.GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
         playerAudioSource = GetComponent<AudioSource>();
         WeaponComponent = GetComponent<Weapon>();
         PlayerSpriteRenderer = GetComponent<SpriteRenderer>();
-        playerBoxCollider2D = GetComponent<BoxCollider2D>();
+        playerCapsuleCollider2D = GetComponent<CapsuleCollider2D>();
 
         playerInput = GetComponent<PlayerInput>();
 
@@ -119,6 +139,10 @@ public class Player : MonoBehaviour, IDamageable
 
         // Cargamos los datos del jugador de prefs
         LoadPlayerPrefs();
+
+        // Carga el contador de puntos y el HUD
+        scoreController.UpdateScoreDisplay(score);
+        hudController.SetMaxHealthOnHealthBar(playerData.maxHealthBase);
     }
 
     // En cada Update llamamos al LogicUpdate() del estado correspondiente
@@ -127,6 +151,18 @@ public class Player : MonoBehaviour, IDamageable
         StateMachine.CurrentState.LogicUpdate();
 
         CurrentVelocity = RB.velocity; // Guardamos la velocidad del rigidbody2D al inicio del frame
+
+        // Actualiza el contador de puntos y el HUD
+        scoreController.UpdateScoreDisplay(score);
+
+        // Carga los datos del cargador y munición
+        // TODO Llamar a estas funciones solo cuando haga falta cambiar los valores, no en cada frame (Con la implementación del sistema de armas)
+        hudController.SetCurrentClipAmmo(WeaponComponent.currentBulletsInMagazine);
+        hudController.SetCurrentClipAmmount(WeaponComponent.currentClipAmount);
+
+        hudController.SetAidKitAmount(currAidKitAmount);
+
+        hudController.SetCurrentHealthOnHealthBar(currHealth);
     }
 
     // En cada Update llamamos al PhysicsUpdate() del estado correspondiente
@@ -137,7 +173,14 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("FirstAidKit") && currAidKitAmount < playerData.maxAidKits)
+        if (collision.CompareTag("PickableItem"))
+        {
+            if (character.Inventory.AddItem(collision.GetComponent<PickableItem>().GetPickableItem()))
+            {
+                Destroy(collision.gameObject);
+            }
+        }
+        else if (collision.CompareTag("FirstAidKit") && currAidKitAmount < playerData.maxAidKits)
         {
             // aumenta la cantidad en 1 e invoca el metodo de recoleccion del item
             currAidKitAmount++;

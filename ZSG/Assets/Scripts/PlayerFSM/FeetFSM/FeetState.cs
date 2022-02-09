@@ -100,22 +100,22 @@ public class FeetState
     {
         if ((angle >= 315f || angle < 45f) && stateMachine.CurrentState != feet.MoveState)
         {
-            Debug.Log("move");
+            //Debug.Log("move");
             stateMachine.ChangeState(feet.MoveState);
         }
         else if (angle >= 45f && angle < 135f && stateMachine.CurrentState != feet.StrafeRightState)
         {
-            Debug.Log("strafe right");
+            //Debug.Log("strafe right");
             stateMachine.ChangeState(feet.StrafeRightState);
         }
         else if (angle >= 135f && angle < 225f && stateMachine.CurrentState != feet.MoveState)
         {
-            Debug.Log("move");
+            //Debug.Log("move");
             stateMachine.ChangeState(feet.MoveState);
         }
         else if (angle >= 225f && angle < 315f && stateMachine.CurrentState != feet.StrafeLeftState)
         {
-            Debug.Log("strafe left");
+            //Debug.Log("strafe left");
             stateMachine.ChangeState(feet.StrafeLeftState);
         }
     }

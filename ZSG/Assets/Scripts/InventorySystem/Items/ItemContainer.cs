@@ -55,15 +55,20 @@ public abstract class ItemContainer : MonoBehaviour, IItemContainer
 
 	public virtual bool AddItem(Item item)
 	{
-		for (int i = 0; i < ItemSlots.Count; i++)
-		{
-			if (ItemSlots[i].CanAddStack(item))
+        //if (item.MaximumStacks > 1)
+        {
+			for (int i = 0; i < ItemSlots.Count; i++)
 			{
-				ItemSlots[i].Item = item;
-				ItemSlots[i].Amount++;
-				return true;
+				// TODO que solo compruebe si se puede estaquear si el item es estaqueable para evitar comprobaciones inecesarias y pasar directamente al segundo for
+				if (ItemSlots[i].CanAddStack(item))
+				{
+					ItemSlots[i].Item = item;
+					ItemSlots[i].Amount++;
+					return true;
+				}
 			}
 		}
+
 
 		for (int i = 0; i < ItemSlots.Count; i++)
 		{
