@@ -9,7 +9,7 @@ public class ItemStash : ItemContainer, IInteractable
 	[SerializeField] ScreenFrameController screenFrameController;
 
 	[SerializeField] RectTransform stashCanvas;
-	[SerializeField] Transform interactionIcon;
+	[SerializeField] InteractionIconController interactionIconController;
 
 	// La detección del jugador se ha movido a otro scrip para no influir en las funciones OnMouse... , así puedo detectar por separado al jugador, la colisión física de la caja, y la derección del mouse con 3 colldiers separados.
 	[SerializeField] ProximityDetector proximityDetector;
@@ -37,6 +37,11 @@ public class ItemStash : ItemContainer, IInteractable
 			screenFrameController = FindObjectOfType<ScreenFrameController>(includeInactive: true);
         }
 
+        if (interactionIconController == null)
+        {
+			interactionIconController = FindObjectOfType<InteractionIconController>(includeInactive: true);
+        }
+
         if (proximityDetector == null)
         {
 			proximityDetector = GetComponentInChildren<ProximityDetector>(includeInactive: true);
@@ -51,12 +56,18 @@ public class ItemStash : ItemContainer, IInteractable
 	protected override void Awake()
 	{
 		base.Awake();
-		
+
 		//stashCanvas.gameObject.SetActive(false);
-		interactionIcon.gameObject.SetActive(false);
+		interactionIconController.DisableInteractionIcon();
 	}
 
-	private void Update()
+    private void Start()
+    {
+		// El panel del stash empieza desactivado
+		stashCanvas.gameObject.SetActive(false);
+    }
+
+    private void Update()
 	{
 		/*if (proximityDetector.IsInRange && Input.GetKeyDown(openKeyCode))
 		{
@@ -75,11 +86,11 @@ public class ItemStash : ItemContainer, IInteractable
 
     private void OnMouseEnter()
     {
-		Debug.Log("on mouse enter");
+		//Debug.Log("on mouse enter");
 
 		if (proximityDetector.IsInRange)
 		{
-			interactionIcon.gameObject.SetActive(true);
+			interactionIconController.LoadInteractionIcon("E");
 			IsTriggered = true;
 		}
 	}
@@ -88,32 +99,30 @@ public class ItemStash : ItemContainer, IInteractable
     {
         if (proximityDetector.IsInRange)
         {
-            if (!interactionIcon.gameObject.activeSelf)
+            if (!interactionIconController.ImageIsActive())
             {
-				interactionIcon.gameObject.SetActive(true);
+				interactionIconController.LoadInteractionIcon("E");
 				IsTriggered = true;
 			}
 
-			interactionIcon.transform.position = Input.mousePosition + new Vector3(50f, 50f, 0f);
+			interactionIconController.UpdateInteractionIconPosition();
 		}
 		// por si nos movemos fuera del rango
         else
         {
-			interactionIcon.gameObject.SetActive(false);
+			interactionIconController.DisableInteractionIcon();
 			IsTriggered = false;
 		}
 	}
 
     private void OnMouseExit()
     {
-		interactionIcon.gameObject.SetActive(false);
+		interactionIconController.DisableInteractionIcon();
 		IsTriggered = false;
 	}
 
     public void InteractionMethod()
     {
-        Debug.Log("Se ha activado el elemento del hideout");
-
 		// Añadimos el panel al screenFrameController
 		screenFrameController.SetCurrentPanel(stashCanvas);
 

@@ -1,20 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CraftingRecipeUI : MonoBehaviour
+public class WorkbenchRecipeUI : MonoBehaviour
 {
 	[Header("References")]
-	[SerializeField] RectTransform arrowParent;
-	[SerializeField] BaseItemSlot[] itemSlots;
+	[SerializeField] Image recipeIcon;
+	[SerializeField] Text recipeTitle;
+	[SerializeField] Text recipeDescription;
 
-	[Header("Public Variables")]
-	public ItemContainer ItemContainer;
+    [SerializeField] RectTransform arrowParent;
+    [SerializeField] BaseItemSlot[] itemSlots;
 
-	private CraftingRecipe craftingRecipe;
-	public CraftingRecipe CraftingRecipe {
-		get { return craftingRecipe; }
-		set { SetCraftingRecipe(value); }
+    [Header("Public Variables")]
+    public ItemContainer ItemContainer;
+
+
+	private CraftingRecipe workbenchRecipe;
+	public CraftingRecipe WorkbenchRecipe
+	{
+		get { return workbenchRecipe; }
+		set { SetWorkbenchRecipe(value); }
 	}
 
 	public event Action<BaseItemSlot> OnPointerEnterEvent;
@@ -34,24 +41,31 @@ public class CraftingRecipeUI : MonoBehaviour
 		}
 	}
 
-	public void OnCraftButtonClick()
+	public void OnRecipeClick()
 	{
-		if (craftingRecipe != null && ItemContainer != null)
+		if (workbenchRecipe != null && ItemContainer != null)
 		{
-			craftingRecipe.Craft(ItemContainer);
+			// TODO cargar receta en la ventana de crafteo
+			
 		}
 	}
 
-	private void SetCraftingRecipe(CraftingRecipe newCraftingRecipe)
-	{
-		craftingRecipe = newCraftingRecipe;
 
-		if (craftingRecipe != null)
+	private void SetWorkbenchRecipe(CraftingRecipe newCraftingRecipe)
+	{
+		// Guarda la receta
+		workbenchRecipe = newCraftingRecipe;
+
+		if (workbenchRecipe != null)
 		{
+			recipeIcon.sprite = newCraftingRecipe.RecipeIcon;
+			recipeTitle.text = newCraftingRecipe.RecipeName;
+			recipeDescription.text = newCraftingRecipe.RecipeDescription;
+
 			int slotIndex = 0;
-			slotIndex = SetSlots(craftingRecipe.Materials, slotIndex);
+			slotIndex = SetSlots(workbenchRecipe.Materials, slotIndex);
 			arrowParent.SetSiblingIndex(slotIndex);
-			slotIndex = SetSlots(craftingRecipe.Results, slotIndex);
+			slotIndex = SetSlots(workbenchRecipe.Results, slotIndex);
 
 			for (int i = slotIndex; i < itemSlots.Length; i++)
 			{
@@ -66,7 +80,7 @@ public class CraftingRecipeUI : MonoBehaviour
 		}
 	}
 
-	// Metodo para añadir los slots de la receta, tanto para los materiales como para el resultado
+	// Metodo para a�adir los slots de la receta, tanto para los materiales como para el resultado
 	private int SetSlots(IList<ItemAmount> itemAmountList, int slotIndex)
 	{
 		for (int i = 0; i < itemAmountList.Count; i++, slotIndex++)

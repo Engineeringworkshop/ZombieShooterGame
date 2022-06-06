@@ -1,13 +1,13 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftingWindow : MonoBehaviour
+public class WorkbenchWindow : MonoBehaviour
 {
 	[Header("References")]
-	[SerializeField] CraftingRecipeUI recipeUIPrefab;
+	[SerializeField] WorkbenchRecipeUI recipeUIPrefab;
 	[SerializeField] RectTransform recipeUIParent;
-	[SerializeField] List<CraftingRecipeUI> craftingRecipeUIs;
+	[SerializeField] List<WorkbenchRecipeUI> craftingRecipeUIs;
 
 	[Header("Public Variables")]
 	public ItemContainer ItemContainer;
@@ -25,46 +25,48 @@ public class CraftingWindow : MonoBehaviour
 	{
 		Init();
 
-		foreach (CraftingRecipeUI craftingRecipeUI in craftingRecipeUIs)
+		// Añade los eventos a cada receta
+		foreach (WorkbenchRecipeUI craftingRecipeUI in craftingRecipeUIs)
 		{
 			craftingRecipeUI.OnPointerEnterEvent += slot => OnPointerEnterEvent(slot);
 			craftingRecipeUI.OnPointerExitEvent += slot => OnPointerExitEvent(slot);
 		}
 	}
 
+	// Inicializa las variables y carga las recetas.
 	private void Init()
 	{
-		recipeUIParent.GetComponentsInChildren<CraftingRecipeUI>(includeInactive: true, result: craftingRecipeUIs);
+		recipeUIParent.GetComponentsInChildren<WorkbenchRecipeUI>(includeInactive: true, result: craftingRecipeUIs);
 		UpdateCraftingRecipes();
 	}
 
-	// MÃ©todo para actualziar las recetas del panel
+	// Método para actualziar las recetas del panel
 	public void UpdateCraftingRecipes()
 	{
-		// AÃ±ade las recetas
+		// Añade las recetas
 		for (int i = 0; i < CraftingRecipes.Count; i++)
 		{
-			// Si ya estÃ¡n todos los slots ocupados, aÃ±ade uno mÃ¡s a la lista.
+			// Si ya están todos los slots ocupados, añade uno más a la lista.
 			if (craftingRecipeUIs.Count == i)
 			{
 				craftingRecipeUIs.Add(Instantiate(recipeUIPrefab, recipeUIParent, false));
 			}
-			// Si el UI estÃ¡ vacÃ­o, aÃ±ade la receta
+			// Si el UI está vacío, añade la receta
 			else if (craftingRecipeUIs[i] == null)
 			{
 				craftingRecipeUIs[i] = Instantiate(recipeUIPrefab, recipeUIParent, false);
 			}
 
-			// AÃ±ade el container de donde recogerÃ¡ los items
+			// Añade el container de donde recogerá los items
 			craftingRecipeUIs[i].ItemContainer = ItemContainer;
-			// AÃ±ade la receta.
-			craftingRecipeUIs[i].CraftingRecipe = CraftingRecipes[i];
+			// Añade la receta.
+			craftingRecipeUIs[i].WorkbenchRecipe = CraftingRecipes[i];
 		}
 
 		// Asigna a null las recetas de las UI extras que no son necesarias (Mejor eliminar estancias???)
 		for (int i = CraftingRecipes.Count; i < craftingRecipeUIs.Count; i++)
 		{
-			craftingRecipeUIs[i].CraftingRecipe = null;
+			craftingRecipeUIs[i].WorkbenchRecipe = null;
 		}
 	}
 }

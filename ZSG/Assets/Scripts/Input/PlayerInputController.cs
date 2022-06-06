@@ -26,7 +26,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(player.playerInput.currentActionMap);
+        //Debug.Log(player.playerInput.currentActionMap);
     }
 
     public void OnMovement(InputAction.CallbackContext context)
@@ -100,9 +100,7 @@ public class PlayerInputController : MonoBehaviour
         if (context.started)
         {
             // Toggle a los paneles (se cerrarán)
-            screenFrameController.DisableInventoryPanel();
-            screenFrameController.DisableEquipmentAndStatsPanel();
-            //screenFrameController.ToggleCraftingPanel();
+            screenFrameController.DisableAllPanels();
         }
     }
 

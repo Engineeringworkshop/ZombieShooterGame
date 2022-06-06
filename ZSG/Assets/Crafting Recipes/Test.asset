@@ -20,3 +20,6 @@ MonoBehaviour:
   Results:
   - Item: {fileID: 11400000, guid: 31767bf9f6e42a34482f1bfd394bfcdd, type: 2}
     Amount: 1
+  RecipeName: TestRecipe
+  RecipeDescription: "Descripci\xF3n de la receta de prueba:"
+  RecipeIcon: {fileID: 0}

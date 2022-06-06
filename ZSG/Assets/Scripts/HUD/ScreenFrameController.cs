@@ -31,6 +31,12 @@ public class ScreenFrameController : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        DisableAllPanels();
+    }
+
+    // Método para activar y desactivar el frame de muerte
     public void ToggleDeadFrame()
     {
         deadFrame.SetActive(!deadFrame.activeSelf);
