@@ -162,5 +162,4 @@ public class ScreenFrameController : MonoBehaviour
 
         gameplayManager.ResumeGame();
     }
-
 }

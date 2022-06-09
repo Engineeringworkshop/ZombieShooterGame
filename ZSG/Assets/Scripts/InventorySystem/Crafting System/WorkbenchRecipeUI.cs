@@ -50,7 +50,7 @@ public class WorkbenchRecipeUI : MonoBehaviour
 		}
 	}
 
-
+	// Método para cargar una receta en el panel
 	private void SetWorkbenchRecipe(CraftingRecipe newCraftingRecipe)
 	{
 		// Guarda la receta

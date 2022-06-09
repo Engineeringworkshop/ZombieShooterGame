@@ -1,0 +1,170 @@
+Using pre-set license
+Built from '2020.3/staging' branch; Version is '2020.3.18f1 (a7d1c678663c) revision 10998214'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Pro; OS build 19044.1741; Version 2009; 64bit' Language: 'es' Physical Memory: 16322 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.3.18f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+E:/Bibliotecas/Unity/ZSG/ZSG/ZSG
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+63107
+Successfully changed project path to: E:/Bibliotecas/Unity/ZSG/ZSG/ZSG
+E:/Bibliotecas/Unity/ZSG/ZSG/ZSG
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 158.28 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.18f1 (a7d1c678663c)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path E:/Bibliotecas/Unity/ZSG/ZSG/ZSG/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1080 Ti (ID=0x1b06)
+    Vendor:   
+    VRAM:     11127 MB
+    Driver:   30.0.15.1295
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56600
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.004029 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 197.22 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.760 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2760ms)
+		BeginReloadAssembly (157ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (3ms)
+		EndReloadAssembly (1210ms)
+			LoadAssemblies (146ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (388ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (62ms)
+			SetupLoadedEditorAssemblies (583ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (197ms)
+				BeforeProcessingInitializeOnLoad (47ms)
+				ProcessInitializeOnLoadAttributes (254ms)
+				ProcessInitializeOnLoadMethodAttributes (76ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.004268 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 249.04 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  3.316 seconds
+Domain Reload Profiling:
+	ReloadAssembly (3319ms)
+		BeginReloadAssembly (316ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (9ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (36ms)
+		EndReloadAssembly (2840ms)
+			LoadAssemblies (220ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (722ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (203ms)
+			SetupLoadedEditorAssemblies (1310ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (17ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (249ms)
+				BeforeProcessingInitializeOnLoad (230ms)
+				ProcessInitializeOnLoadAttributes (744ms)
+				ProcessInitializeOnLoadMethodAttributes (45ms)
+				AfterProcessingInitializeOnLoad (23ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (27ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.17 seconds
+Refreshing native plugins compatible for Editor in 1.14 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2742 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 120.4 MB.
+System memory in use after: 120.6 MB.
+
+Unloading 30 unused Assets to reduce memory usage. Loaded Objects now: 3186.
+Total: 5.479500 ms (FindLiveObjects: 0.334300 ms CreateObjectMapping: 0.171500 ms MarkObjects: 4.860200 ms  DeleteObjects: 0.111500 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Fonts
+  artifactKey: Guid(18155dad47586cd4c8c05fb189691971) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts using Guid(18155dad47586cd4c8c05fb189691971) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b82c5f26884586f706635b856beb5da') in 0.014413 seconds 
+  Import took 0.020609 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.531550 seconds.
+  path: Assets/Fonts/Metal-Regular.ttf
+  artifactKey: Guid(310a88453ef504d43af304207f05f7b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Metal-Regular.ttf using Guid(310a88453ef504d43af304207f05f7b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24465567f47c76d550260edd8d5b7db3') in 0.250653 seconds 
+  Import took 0.262790 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 46.727592 seconds.
+  path: Assets/Fonts/Metal-Regular SDF.asset
+  artifactKey: Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Metal-Regular SDF.asset using Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '99dc81b5aa9dc5f2e0ef7bff748a504d') in 0.086978 seconds 
+  Import took 0.096841 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 265.619589 seconds.
+  path: Assets/Fonts/Metal-Regular SDF.asset
+  artifactKey: Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Metal-Regular SDF.asset using Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e9e0241c196e7f97e058448237ebc767') in 0.059116 seconds 
+  Import took 0.067261 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.021471 seconds.
+  path: Assets/Fonts/Metal-Regular SDF.asset
+  artifactKey: Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Metal-Regular SDF.asset using Guid(d411fc127e43a5e49bf30fe4bf13ab26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e9e0241c196e7f97e058448237ebc767') in 0.043229 seconds 
+  Import took 0.051287 seconds .
+

@@ -6,7 +6,7 @@ public class ItemStash : ItemContainer, IInteractable
 	[SerializeField] SpriteRenderer spriteRenderer;
 	//[SerializeField] KeyCode openKeyCode = KeyCode.E;
 
-	[SerializeField] ScreenFrameController screenFrameController;
+	[SerializeField] protected ScreenFrameController screenFrameController;
 
 	[SerializeField] RectTransform stashCanvas;
 	[SerializeField] InteractionIconController interactionIconController;
@@ -121,7 +121,7 @@ public class ItemStash : ItemContainer, IInteractable
 		IsTriggered = false;
 	}
 
-    public void InteractionMethod()
+    public virtual void InteractionMethod()
     {
 		// Añadimos el panel al screenFrameController
 		screenFrameController.SetCurrentPanel(stashCanvas);
