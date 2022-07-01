@@ -41,6 +41,8 @@ public class TravelBenchController : MonoBehaviour, IInteractable
     private void Awake()
     {
         interactionIconController.DisableInteractionIcon();
+
+        travelMapCanvas.gameObject.SetActive(false);
     }
 
     #region Mouse managment
