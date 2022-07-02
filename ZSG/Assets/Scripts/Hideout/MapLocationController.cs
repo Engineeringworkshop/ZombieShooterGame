@@ -48,7 +48,7 @@ public class MapLocationController : MonoBehaviour, IPointerEnterHandler, IPoint
             highlightedFrame.SetActive(true);
         }
 
-        Debug.Log("Mouse enter location");
+        //Debug.Log("Mouse enter location");
 
         if (OnPointerEnterEvent != null)
         {
@@ -72,7 +72,7 @@ public class MapLocationController : MonoBehaviour, IPointerEnterHandler, IPoint
             highlightedFrame.SetActive(false);
         }
 
-        Debug.Log("Mouse exit location");
+        //Debug.Log("Mouse exit location");
 
         if (OnPointerExitEvent != null)
         {

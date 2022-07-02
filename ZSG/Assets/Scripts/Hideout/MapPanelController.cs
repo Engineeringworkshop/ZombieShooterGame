@@ -23,8 +23,6 @@ public class MapPanelController : MonoBehaviour
         MapLocationController.OnMouseExitOnLocation += HideLocationInfo;
 
         MapLocationController.OnLocationSelected += ShowConfirmationTravelPanel;
-
-        print("Enable");
     }
 
     // Eliminamos la suscripción
@@ -34,8 +32,6 @@ public class MapPanelController : MonoBehaviour
         MapLocationController.OnMouseExitOnLocation -= HideLocationInfo;
 
         MapLocationController.OnLocationSelected -= ShowConfirmationTravelPanel;
-
-        print("Disable");
     }
 
     private void Awake()
@@ -48,7 +44,7 @@ public class MapPanelController : MonoBehaviour
     // Método para activar el panel cuando se seleccione una localización
     private void ShowLocationInfo(LevelData locationData)
     {
-        print("Mouse enter");
+        //print("Mouse enter");
 
         // Activa el panel
         levelDescriptionPanel.SetActive(true);
@@ -78,7 +74,7 @@ public class MapPanelController : MonoBehaviour
     // Método para cargar la escena cuando se pulse el botón
     public void LoadLevel()
     {
-        print("Start game");
+        //print("Start game");
 
         if (locationData != null)
         {

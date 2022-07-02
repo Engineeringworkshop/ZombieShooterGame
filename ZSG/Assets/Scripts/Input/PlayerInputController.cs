@@ -19,7 +19,7 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         player = GetComponent<Player>();
     }

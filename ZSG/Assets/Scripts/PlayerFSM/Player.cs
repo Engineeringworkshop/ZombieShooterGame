@@ -116,11 +116,8 @@ public class Player : MonoBehaviour, IDamageable
 
         isHealing = false;
         isDead = false;
-    }
 
-    // Start 
-    void Start()
-    {
+        // Enlaza las componentes
         Anim = GetComponent<Animator>();
         RB = GetComponent<Rigidbody2D>();
         playerAudioSource = GetComponent<AudioSource>();
@@ -133,6 +130,12 @@ public class Player : MonoBehaviour, IDamageable
         playerInputController = GetComponent<PlayerInputController>();
 
         character = GetComponent<Character>();
+    }
+
+    // Start 
+    void Start()
+    {
+        
 
         // Inicializamos la maquina de estados
         StateMachine.Initialize(IdleState);
