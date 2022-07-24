@@ -40,14 +40,14 @@ public class GameplayManager : MonoBehaviour
     // Metodo para gestionar el final del nivel
     public void EndLevel()
     {
-        // reproducir sonido de vitoria
+        // Reproducir sonido de vitoria
         audioSource.PlayOneShot(victorySound);
 
         // Guarda la escena en los prefs para poder continuar
-        PlayerPrefs.SetInt("currentScene", SceneManager.GetActiveScene().buildIndex);
+        //PlayerPrefs.SetInt("currentScene", SceneManager.GetActiveScene().buildIndex);
 
-        // cargar el siguiente nivel despues de 5 segundos.
-        StartCoroutine(LoadNextLevel());
+        // Inicia la coroutine de final de nivel
+        StartCoroutine(EndLevelCoroutine());
     }
 
     // Metodo para reiniciar el nivel en caso de muerte
@@ -98,10 +98,10 @@ public class GameplayManager : MonoBehaviour
     #region Coroutines
 
     // Metodo para cargar el siguiente nivel despues de un tiempo
-    private IEnumerator LoadNextLevel()
+    private IEnumerator EndLevelCoroutine()
     {
         yield return new WaitForSecondsRealtime(2.0f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Hideout");
     }
 
     // Metodo para reiniciar el nivel despues de un tiempo
